@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import { Link } from 'react-router-dom';
 const MetaMaskLogin = ({ onLogin }) => {
   const [loading, setLoading] = useState(false);
 
@@ -30,9 +30,9 @@ const MetaMaskLogin = ({ onLogin }) => {
 
     return (
       
-    <button onClick={handleLogin} disabled={loading}>
+      <Link to="/Home" className='w-100 mb-4 btn btn-lg btn-primary' onClick={handleLogin}>
       {loading ? 'Logging in...' : 'Login with MetaMask'}
-    </button>
+    </Link>
   );
 };
 

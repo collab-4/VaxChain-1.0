@@ -55,7 +55,7 @@ const StartingPage = () => {
               <h1 className="my-5 display-10 fw-bold ls-tight px-3">Welcome</h1>
               <MetaMaskLogin onLogin={handleLogin} />
               {/* <MDBBtn className='w-100 mb-4 btn-lg' size='md' onClick={handleSignUp}>Login using meta mask</MDBBtn> */}
-              <Link to="/Home" className='w-100 mb-4 btn btn-lg btn-primary'>Login using Meta Mask</Link>
+              {/* <Link to="/Home" className='w-100 mb-4 btn btn-lg btn-primary'>Login using Meta Mask</Link> */}
               <MDBBtn outline className='w-100 mb-4 btn-lg' size='md' onClick={toggleOpen}>Verify</MDBBtn>
             </MDBCardBody>
           </MDBCard>

@@ -20,7 +20,7 @@ function Home () {
             </Col>
             <Col>
         <div className="box" style={{ width: '300px', height: '500px' }}>
-
+              
               </div>
             </Col>
           </Row>
