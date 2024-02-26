@@ -36,3 +36,9 @@
     transform: rotate(360deg);
   }
 }
+:root {
+  --primary-color: #f8f8f8; /* Primary color */
+  --secondary-color: #180137; /* Secondary color */
+  --accent-color: #e2cff9; /* Accent color */
+  --highlight-color: #1b006b; /* Highlight color */
+}
