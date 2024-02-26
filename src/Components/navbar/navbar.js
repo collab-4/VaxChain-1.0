@@ -40,19 +40,19 @@ function Navbarfunction() {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="ms-auto" defaultActiveKey="#home">
             <Nav.Item>
-              <Nav.Link as={Link} to="/" onClick={() => updateExpanded(false)}>
-                HOME
+              <Nav.Link as={Link} to="/Home" onClick={() => updateExpanded(false)}>
+                DASHBOARD
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link as={Link} to="/" onClick={() => updateExpanded(false)}>
+              <Nav.Link as={Link} to="/Home" onClick={() => updateExpanded(false)}>
                 TRACK
               </Nav.Link>
             </Nav.Item>
 
             <Nav.Item>
-              <Nav.Link as={Link} to="/" onClick={() => updateExpanded(false)}>
-                RECIVE
+              <Nav.Link as={Link} to="/NewTransit" onClick={() => updateExpanded(false)}>
+                NEW TRANSIT
               </Nav.Link>
             </Nav.Item>
           </Nav>

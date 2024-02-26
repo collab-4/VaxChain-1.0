@@ -51,14 +51,14 @@ const TransitData = () => {
                         style={{ backgroundColor: 'var(--secondary-color)', borderColor: 'var(--secondary-color)',color:'var(--primary-color' }}
                         onClick={() => handleReceive(item.id)}
                       >
-                        Receive
+                        Recieve
                       </MDBBtn>
                     ) : (
                       <MDBBtn
                         className="btn-outline-secondary"
                         style={{ borderColor: 'var(--secondary-color)', color: 'var(--secondary-color)' }}
                       >
-                        Received
+                        Recieved
                       </MDBBtn>
                     )}
                   </td>

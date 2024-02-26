@@ -8,7 +8,7 @@ import {
 
 } from 'mdb-react-ui-kit';
 import { Link } from 'react-router-dom';
-
+import MetaMaskLogin from './MetaMaskLogin';
 
 
 const StartingPage = () => {
@@ -17,10 +17,10 @@ const StartingPage = () => {
   // const [isValidVaccine, setIsValidVaccine] = useState(false);
   const VALID_VACCINE_ID = "VID201";
  
-  // const handleSignUp = () => {
-  //   console.log("Sign up button clicked");
-    
-  // };
+  const handleLogin = (ethereumAddress) => {
+    // Handle the login callback, such as setting user state or redirecting to another page
+    console.log('Logged in with MetaMask. Ethereum address:', ethereumAddress);
+  };
 
   const toggleOpen = () => {
     setCentredModal(!centredModal);
@@ -40,14 +40,12 @@ const StartingPage = () => {
     }
   };
 
-  // const closeModal = () => {
-  //   setShowModal(false);
-  // };
+  
 
   return (
     <MDBContainer fluid className='starting-page p-4 background-radial-gradient overflow-hidden'>
       <MDBRow>
-        <MDBCol md='6' className=' d-flex flex-column  '>
+        <MDBCol md='6' className=' d-flex flex-column align-items-center justify-content-center'>
           <h1 className="my-10 display-1 fw-bold ls-tight " style={{ color: 'hsl(218, 81%, 95%)',font:'Prompt' }}>VaxChain <br /></h1>
           <p className='px-3 my-10' style={{ color: 'hsl(218, 81%, 85%)',font:'Prompt' }}>Securing vaccine integrity through blockchain technology</p>
         </MDBCol>
@@ -55,8 +53,9 @@ const StartingPage = () => {
           <MDBCard className='my-5 bg-glass w-100 h-100'>
             <MDBCardBody className='p-5 d-flex flex-column justify-content-center'>
               <h1 className="my-5 display-10 fw-bold ls-tight px-3">Welcome</h1>
+              <MetaMaskLogin onLogin={handleLogin} />
               {/* <MDBBtn className='w-100 mb-4 btn-lg' size='md' onClick={handleSignUp}>Login using meta mask</MDBBtn> */}
-              <Link to="/Home" className='w-100 mb-4 btn btn-lg btn-primary'>Login using meta mask</Link>
+              <Link to="/Home" className='w-100 mb-4 btn btn-lg btn-primary'>Login using Meta Mask</Link>
               <MDBBtn outline className='w-100 mb-4 btn-lg' size='md' onClick={toggleOpen}>Verify</MDBBtn>
             </MDBCardBody>
           </MDBCard>
