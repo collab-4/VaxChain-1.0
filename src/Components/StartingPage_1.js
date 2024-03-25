@@ -56,7 +56,7 @@ const StartingPage = () => {
               <MetaMaskLogin onLogin={handleLogin} />
               {/* <MDBBtn className='w-100 mb-4 btn-lg' size='md' onClick={handleSignUp}>Login using meta mask</MDBBtn> */}
               {/* <Link to="/Home" className='w-100 mb-4 btn btn-lg btn-primary'>Login using Meta Mask</Link> */}
-              <MDBBtn outline className='w-100 mb-4 btn-lg' size='md' onClick={toggleOpen}>Verify</MDBBtn>
+              <MDBBtn outline className='w-100 mb-4 btn-lg' size='md' onClick={toggleOpen}>Check Validity of your vaccine </MDBBtn>
             </MDBCardBody>
           </MDBCard>
         </MDBCol>

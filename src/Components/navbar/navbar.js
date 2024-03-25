@@ -14,6 +14,7 @@ function Navbarfunction() {
       updateNavbar(false);
     }
   }
+  
  
 
  

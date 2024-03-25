@@ -1,0 +1,70 @@
+.sticky {
+    background-color: var(--accent-color)  !important;
+    /* transition: all 0.3s ease-out 0s !important; */
+    box-shadow: 0px 10px 10px 0px var(--accent-color) !important;
+    backdrop-filter: blur(15px) !important;
+    opacity: 0.9;
+    
+  }
+  .navbar {
+      position: fixed ;
+      transition: all 0.3s ease-out 0s ;
+      padding: 0.3rem 2rem ;
+      font-size: 1.2rem ;
+    }
+    .navbar-brand {
+      color: var(--accent-color)!important;
+      font-family: Prompt;
+    }
+    
+  .navbar-nav .nav-link {
+      color: var(--secondary_color)!important;
+      padding-right: 1rem !important;
+      padding-left: 1rem !important;
+    }
+    .navbar-nav .nav-item {
+      position: relative;
+      margin-left: 20px;
+    }
+    .navbar-nav .nav-item a {
+      font-weight: 400;
+      transition: all 0.3s ease-out 0s;
+      position: relative;
+      z-index: 1;
+    }
+    .navbar-nav .nav-item a::after {
+      content: "";
+      position: relative;
+      display: block;
+      height: 5px;
+      width: 0;
+      border-radius: 16px;
+      background: var(--highlight-color);
+      bottom: 1px;
+      left: 0;
+      z-index: -1;
+      transition: all 0.3s ease-out 0s;
+    }
+    .navbar-nav .nav-item a:hover::after {
+      width: 100%;
+    }
+   
+    
+  @media (max-width: 767px) {
+      .navbar {
+        padding: 1rem 2rem !important;
+        font-size: 1.4rem !important;
+        background-color: var(--accent-color) !important;
+      }
+      .navbar-nav .nav-item a::after {
+        display: none !important;
+      }
+    }
+    
+/* .logo {
+    height: 1.8em !important;
+  width: auto;
+  margin-right: 8px;
+  } */
+ 
+  

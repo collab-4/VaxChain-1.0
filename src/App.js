@@ -1,7 +1,7 @@
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import React, { useState } from 'react';
-import Start from './Components/StartingPage';
+import Start from './Components/LandingPage/StartingPage';
 import './Components/Style.css';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import Home from './Components/Home';
