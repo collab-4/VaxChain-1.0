@@ -43,7 +43,8 @@ const StartingPage = () => {
 
     return (<div>
       
-      <Navbar />
+        <Navbar />
+        
       <MDBContainer fluid className='starting-page p-4  background-radial-gradient '>
         <MDBRow className='m-10'>
         <MDBCol md='6' className=' d-flex flex-column align-items-center justify-content-center'>
@@ -52,7 +53,7 @@ const StartingPage = () => {
         </MDBCol>
         <MDBCol md='6' className='position-relative justify-content-center align-items-center'>
           
-              <h1 className="my-5 display-10 fw-bold ls-tight px-3 text-white">chek your vaccine validity here !</h1>
+              <h1 className="my-5 display-10 fw-bold ls-tight px-3 text-white">check your vaccine validity here !</h1>
              <MDBBtn outline className='w-100 mb-4 btn-lg' size='md' onClick={toggleOpen}>Check Validity of your vaccine </MDBBtn>
         
         </MDBCol>
