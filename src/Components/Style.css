@@ -37,9 +37,7 @@
     background-color: hsla(0, 0%, 100%, 0.838) !important;
     backdrop-filter: saturate(200%) blur(50px);
   }
- .starting-page{
-    height: 100vh;
- }
+
   
 
  .scrollable-box {

@@ -77,7 +77,9 @@ const MetaMaskLogin = () => {
   };
 
   return (
-    <Navbar fixed="top" expand="md" className="bg-white opacity-90 sticky">
+    
+    
+    <Navbar fixed="top" expand="md" className="bg-white opacity-90 ">
       <Container>
         <Navbar.Brand href="/" className="d-flex align-items-center whit">
           <h1 className="mb-0 ml-2">Vaxchain</h1>
@@ -96,6 +98,7 @@ const MetaMaskLogin = () => {
         </Nav>
       </Container>
     </Navbar>
+
   );
 };
 
