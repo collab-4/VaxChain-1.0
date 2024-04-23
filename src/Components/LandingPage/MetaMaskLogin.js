@@ -3,14 +3,15 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
 import { Link } from "react-router-dom";
-import firestore from "../../firebase"; // Update the import path as per your file structure
-import { collection, doc, getDoc } from "firebase/firestore"; // Import Firestore functions
 
+import { database } from "./firebase";
+import { ref, get  } from "firebase/database";
+// import AlertBox from "../Alertbox";
 import "./navbar1.css";
 
 const MetaMaskLogin = () => {
   const [loading, setLoading] = useState(false);
-
+  const [alertMessage, setAlertMessage] = useState(); 
   const handleLogin = async () => {
     setLoading(true);
     try {
@@ -20,9 +21,7 @@ const MetaMaskLogin = () => {
         await window.ethereum.request({ method: "eth_requestAccounts" });
         // Get the user's Ethereum address
         const accounts = await window.ethereum.request({ method: "eth_accounts" });
-        const ethereumAddress = accounts[0]; // Assuming the user has at least one account
-
-        // Check if the Ethereum address exists in the Firestore database
+        const ethereumAddress = accounts[0]; 
         const addressExists = await checkEthereumAddressExists(ethereumAddress);
 
         if (addressExists) {
@@ -31,15 +30,15 @@ const MetaMaskLogin = () => {
           window.location.href = "/home";
         } else {
           console.error("Ethereum address not found in Firestore.");
-          // Handle case where Ethereum address is not found in the database
+          setAlertMessage("Ethereum address not found."); // Set alert message
         }
       } else {
         console.error("MetaMask is not installed.");
-        // Handle case where MetaMask is not installed
+        setAlertMessage("MetaMask is not installed."); // Set alert message
       }
     } catch (error) {
       console.error("Error logging in with MetaMask:", error);
-      // Handle errors, such as user denial or network issues
+      setAlertMessage("Error logging in with MetaMask."); // Set alert message
     } finally {
       setLoading(false);
     }
@@ -47,39 +46,34 @@ const MetaMaskLogin = () => {
 
   const checkEthereumAddressExists = async (ethereumAddress) => {
     try {
-      const docRef = doc(firestore, "vaxchain", "metamaskDB");
-      const docSnap = await getDoc(docRef);
-      console.log(ethereumAddress);
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        if (data) {
-          const { ID } = data; // Replace with the actual Ethereum address
-          console.log(ID);
-          if (ID === ethereumAddress) {
-            console.log("Ethereum address matches ID in Firestore.");
-            return true;
-          } else {
-            console.log("Ethereum address does not match ID in Firestore.");
-            return false;
-          }
+      console.log("loged in account ", ethereumAddress);
+      const snapshot = await get(ref(database, "/ValidUserID"));
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        console.log(snapshot.val());
+        if (data && ethereumAddress in data) {
+          const role = data[ethereumAddress];
+          console.log(`Ethereum ID ${ethereumAddress} is valid. Role: ${role} `);
+          alert(`Ethereum ID ${ethereumAddress} is valid. Role: ${role} `);
+          return role; // Return the role if needed
         } else {
-          console.error("No data found in the document.");
-          return false;
+          console.log(`Ethereum ID ${ethereumAddress} not found in ValidEthID`);
+          return null;
         }
       } else {
-        console.error("Document does not exist.");
-        return false;
+        console.log("ValidEthID branch does not exist or has no data");
+        return null;
       }
     } catch (error) {
-      console.error("Error fetching data from Firestore:", error);
-      return false;
+      console.error("Error fetching data from Firebase:", error);
+      return null;
     }
   };
 
   return (
     
-    
     <Navbar fixed="top" expand="md" className="bg-white opacity-90 ">
+      {/* <AlertBox message={alertMessage} /> */}
       <Container>
         <Navbar.Brand href="/" className="d-flex align-items-center whit">
           <h1 className="mb-0 ml-2">Vaxchain</h1>
