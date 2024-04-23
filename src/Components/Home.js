@@ -3,9 +3,12 @@ import Navbar from './navbar/navbar'
 import Footer from './footer/footer';
 // import { MDBIcon, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 import TransitData from './TansitData';
-
+import avatar from '../image/avathar.png';
 import { Container, Row, Col } from 'react-bootstrap';
-function Home () {
+function Home() {
+  const ethereumAddress = window.ethereum?.selectedAddress;
+  const account = window.ethereum?.selectedAddress ? [window.ethereum.selectedAddress] : null;
+
   return (
       <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <Navbar />
@@ -20,7 +23,13 @@ function Home () {
             </Col>
             <Col>
         <div className="box" style={{ width: '300px', height: '500px' }}>
-              
+                <img src={avatar} alt="avathar.png" style={{ width: '150px', padding: '20px' }} />
+                <hr />
+                <h2>Account ID</h2>
+                <p style={{ wordWrap: 'break-word', overflow: 'hidden', padding: '10px' }}>{ethereumAddress}</p>
+                <h3>Role</h3>
+                <p style={{ wordWrap: 'break-word', overflow: 'hidden' }}>Manager</p>
+                
               </div>
             </Col>
           </Row>
