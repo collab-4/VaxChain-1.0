@@ -6,12 +6,14 @@ import { Link } from "react-router-dom";
 
 import { database } from "./firebase";
 import { ref, get  } from "firebase/database";
-// import AlertBox from "../Alertbox";
+import AlertBox from "../Alertbox";
 import "./navbar1.css";
+import Home from "../Home";
 
 const MetaMaskLogin = () => {
   const [loading, setLoading] = useState(false);
   const [alertMessage, setAlertMessage] = useState(); 
+  const [ethereumAddress, setEthereumAddress] = useState(null);
   const handleLogin = async () => {
     setLoading(true);
     try {
@@ -22,6 +24,7 @@ const MetaMaskLogin = () => {
         // Get the user's Ethereum address
         const accounts = await window.ethereum.request({ method: "eth_accounts" });
         const ethereumAddress = accounts[0]; 
+        
         const addressExists = await checkEthereumAddressExists(ethereumAddress);
 
         if (addressExists) {
@@ -55,6 +58,7 @@ const MetaMaskLogin = () => {
           const role = data[ethereumAddress];
           console.log(`Ethereum ID ${ethereumAddress} is valid. Role: ${role} `);
           alert(`Ethereum ID ${ethereumAddress} is valid. Role: ${role} `);
+          setEthereumAddress(ethereumAddress); 
           return role; // Return the role if needed
         } else {
           console.log(`Ethereum ID ${ethereumAddress} not found in ValidEthID`);
@@ -71,9 +75,10 @@ const MetaMaskLogin = () => {
   };
 
   return (
-    
+    <div>
     <Navbar fixed="top" expand="md" className="bg-white opacity-90 ">
-      {/* <AlertBox message={alertMessage} /> */}
+      
+      
       <Container>
         <Navbar.Brand href="/" className="d-flex align-items-center whit">
           <h1 className="mb-0 ml-2">Vaxchain</h1>
@@ -91,7 +96,9 @@ const MetaMaskLogin = () => {
           </Nav.Item>
         </Nav>
       </Container>
-    </Navbar>
+      </Navbar>
+      <AlertBox message="try a diffrent acount" />
+      </div>
 
   );
 };

@@ -63,37 +63,14 @@
     border-bottom-right-radius: 0.25rem;
   }
 
-
-
-  .alert-box {
-    position: absolute;
-    top: 5px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 50%;
-    height: 50px;
-    background-color: whitesmoke;
-    border: 2px solid var(--highlight-color);
-    /* border-radius: 5px; */
-    box-shadow: #44006b;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  .alert{
+  /* position: absolute; */
+    top: 60px;
+    /* transform: translateX(99.99%); */
+    /* width: 50%; */
+    justify-content: left;
+    /* align-items: center; */
     opacity: 80;
     transition: opacity 0.3s ease-in-out;
   }
-  
-  .alert-box.show {
-    opacity: 1;
-  }
-  
-  .alert-box.hide {
-    opacity: 0;
-    pointer-events: none;
-  }
-  
-  .message {
-    font-weight: bold;
-    text-align: center;
-  }
-  
+ 
