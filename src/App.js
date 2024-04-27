@@ -7,6 +7,7 @@ import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import Home from './Components/Home';
 import Navbar from './Components/navbar/navbar';
 import NewTransitPage from './Components/NewTransitPage';
+import Track from './Components/Track';
 function App() {
   const [ethereumAddress, setEthereumAddress] = useState('');
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/Home" element={<Home ethereumAddress={ethereumAddress} />} />
           <Route path="/Navbar" element={<Navbar />} /> {/* Corrected to pass the component itself */}
           <Route path="/NewTransit" element={<NewTransitPage />} /> {/* Corrected to pass the component itself */}
+          <Route path="/Track" element={<Track />} />
         </Routes>
       </div>
     </BrowserRouter>
