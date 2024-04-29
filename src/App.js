@@ -5,6 +5,7 @@ import Start from './Components/LandingPage/StartingPage';
 import './Components/Style.css';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import Home from './Components/Home';
+import Admin from './Components/Admin';
 import Navbar from './Components/navbar/navbar';
 import NewTransitPage from './Components/NewTransitPage';
 import Track from './Components/Track';
@@ -19,6 +20,7 @@ function App() {
           <Route path="/Navbar" element={<Navbar />} /> {/* Corrected to pass the component itself */}
           <Route path="/NewTransit" element={<NewTransitPage />} /> {/* Corrected to pass the component itself */}
           <Route path="/Track" element={<Track />} />
+          <Route path="/Admin" element={<Admin />} />
         </Routes>
       </div>
     </BrowserRouter>

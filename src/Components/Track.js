@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
-  MDBTable,
-  MDBTableBody,
-  MDBTableHead,
+  MDBBadge,
   MDBBtn,
   MDBInput,
 } from "mdb-react-ui-kit";
@@ -71,19 +69,21 @@ function Track() {
                   </div>
                   <div style={{ margin: "10px" }}>
                     <strong>Status:</strong>{" "}
-                    {transitDetails.status.toString() !== undefined
-                      ? transitDetails.status.toString() === "0"
-                        ? "Pending"
-                        : transitDetails.status.toString() === "1"
-                        ? "In Transit"
-                        : transitDetails.status.toString() === "2"
-                        ? "Received"
-                        : transitDetails.status.toString() === "3"
-                        ? "Received Final"
-                        : transitDetails.status.toString() === "4"
-                        ? "Tampered"
-                        : "Unknown Status"
-                      : "Unknown Status"}
+                    {transitDetails.status.toString() === "0" ? (
+                  <MDBBadge>PENDING</MDBBadge>
+                ) : transitDetails.status.toString() === "1" ? (
+                  <MDBBadge className="mx-2" color="secondary" light>
+                    IN TRANSIT
+                  </MDBBadge>
+                ) : transitDetails.status.toString() === "2" ? (
+                  <MDBBadge color="success" light>
+                    RECEIVED
+                  </MDBBadge>
+                ) : (
+                  <MDBBadge className="mx-2" color="danger" light>
+                    TEMPERATURE BREACH
+                  </MDBBadge>
+                )}
                   </div>
                   <div style={{ margin: "10px" }}>
                     <strong>Sender:</strong> {transitDetails.sender}
@@ -95,7 +95,7 @@ function Track() {
                     <strong>Delivery Time:</strong>{" "}
                     {transitDetails.deliveryTime !== undefined
                       ? transitDetails.deliveryTime.toString() === "0"
-                        ? "NIL"
+                        ? "Not Yet Delivered"
                         : new Date(
                             Number(transitDetails.deliveryTime) * 1000
                           ).toLocaleString()
@@ -108,7 +108,7 @@ function Track() {
                     <strong>Pickup Time:</strong>{" "}
                     {transitDetails.pickupTime !== undefined
                       ? transitDetails.pickupTime.toString() === "0"
-                        ? "NIL"
+                        ? "Not yet Picked up"
                         : new Date(
                             Number(transitDetails.pickupTime) * 1000
                           ).toLocaleString()
