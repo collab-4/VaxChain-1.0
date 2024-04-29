@@ -6,7 +6,7 @@ import {
   MDBBtn,
   MDBBadge,
 } from "mdb-react-ui-kit";
-import SearchBar from "./SearchPage";
+// import SearchBar from "./SearchPage";
 import { Web3 } from "web3";
 import Transit from "../contracts/Transit2.json";
 import { set } from "firebase/database";
@@ -135,7 +135,7 @@ const TransitData = () => {
 
   return (
     <div>
-      <SearchBar />
+      
       <MDBTable>
         <MDBTableHead>
           <tr>
