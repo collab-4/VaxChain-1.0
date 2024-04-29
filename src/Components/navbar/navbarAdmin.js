@@ -14,6 +14,7 @@ function Navbarfunction() {
       updateNavbar(false);
     }
   }
+ 
   
  
 
@@ -36,11 +37,22 @@ function Navbarfunction() {
           <span></span>
           <span></span>
           <span></span>
-        
-
+          <span></span>
+          <span></span>
+          
+          
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="ms-auto" defaultActiveKey="#home">
-            
+          <Nav.Item>
+              <Nav.Link as={Link} to="/admin" onClick={() => updateExpanded(false)}>
+              DASHBOARD
+              </Nav.Link>
+        </Nav.Item>
+          <Nav.Item>
+              <Nav.Link as={Link} to="/ManagerList" onClick={() => updateExpanded(false)}>
+              MANAGER LIST
+              </Nav.Link>
+        </Nav.Item>
           </Nav>
         </Navbar.Collapse>
       </Container>

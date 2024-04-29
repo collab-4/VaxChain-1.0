@@ -30,7 +30,8 @@ const MetaMaskLogin = () => {
 
         if (addressExists) {
           console.log("Ethereum address found in Firestore:", ethereumAddress);
-          // Redirect to /home if the Ethereum address matches
+          sessionStorage.setItem('loggedInEthAddress', ethereumAddress);
+          console.log("stored the address in session storage as loggedInEthAddress");
           if (role == "manager") {
             window.location.href = "/home";
           }

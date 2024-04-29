@@ -6,10 +6,7 @@ import TransitData from "./TansitData";
 import avatar from "../image/avathar.png";
 import { Container, Row, Col } from "react-bootstrap";
 function Home() {
-  const ethereumAddress = window.ethereum?.selectedAddress;
-  const account = window.ethereum?.selectedAddress
-    ? [window.ethereum.selectedAddress]
-    : null;
+  const loggedInEthAddress = sessionStorage.getItem("loggedInEthAddress");
 
   return (
     <div
@@ -48,7 +45,7 @@ function Home() {
                     padding: "10px",
                   }}
                 >
-                  {ethereumAddress}
+                  {loggedInEthAddress}
                 </p>
                 <h3>Role</h3>
                 <p style={{ wordWrap: "break-word", overflow: "hidden" }}>

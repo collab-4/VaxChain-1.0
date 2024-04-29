@@ -7,7 +7,7 @@ import {
   MDBInput
 
 } from 'mdb-react-ui-kit';
-import Navbar from "./MetaMaskLogin";
+import Login from "./MetaMaskLogin";
 const StartingPage = () => {
   const [centredModal, setCentredModal] = useState(false);
   const [vaccineId, setVaccineId] = useState('');
@@ -29,7 +29,7 @@ const StartingPage = () => {
       <MDBContainer fluid className='starting-page min-vh-100 p-4  background-radial-gradient '>
       
       <MDBContainer >
-      <Navbar />
+      <Login />
         <MDBRow className=' h-100'>
         <MDBCol md='6' className=' d-flex flex-column align-items-center justify-content-center'>
           <h1 className="my-10 display-1 fw-bold ls-tight " style={{ color: 'hsl(218, 81%, 95%)',font:'Prompt' }}>VaxChain <br /></h1>
