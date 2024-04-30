@@ -28,9 +28,10 @@ function Home() {
   const [oldAddress, setOldAddress] = useState("");
   const handleAddManager = async () => {
     try {
+      console.log(newAddress,"check",loggedInEthAddress);
       await contract.methods
         .registerManager(newAddress)
-        .send({ from: loggedInEthAddress });
+        .send({ from: "0x66EBE61Ee12f033504e6a4F1CB7eD14d46133E91", gasLimit: '272995' });
       alert("Manager added successfully");
       await addNewAddressToDatabase(newAddress);
       setNewAddress("");
@@ -54,7 +55,7 @@ function Home() {
     try {
       await contract.methods
         .removeManager(oldAddress)
-        .send({ from: loggedInEthAddress });
+        .send({ from: "0x66EBE61Ee12f033504e6a4F1CB7eD14d46133E91" });
       alert("Manager removed successfully");
       setOldAddress("");
       await deleteAddressFromDatabase(oldAddress);

@@ -153,7 +153,7 @@ const TransitData = () => {
                   >
                     Receive Transit
                   </MDBBtn>
-                ) : (
+                ) : item.status.toString() === "1"?(
                   <MDBBtn
                     className="btn-outline-secondary"
                     style={{
@@ -163,6 +163,16 @@ const TransitData = () => {
                   >
                     Transit Started
                   </MDBBtn>
+                    ) : (
+                      <MDBBtn
+                      className="btn-outline-secondary"
+                      style={{
+                        borderColor: "var(--secondary-color)",
+                        color: "var(--secondary-color)",
+                      }}
+                    >
+                      RECEIVED
+                    </MDBBtn>
                 )
                   
                 }
