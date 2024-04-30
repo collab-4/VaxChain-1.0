@@ -9,7 +9,8 @@ import {
 import SearchBar from "./SearchPage";
 import { Web3 } from "web3";
 import Transit from "../contracts/Transit2.json";
-import { set } from "firebase/database";
+import network from "../network/network.json";
+import { ethers, Contract } from "ethers";
 const TransitData = () => {
   const [data, setData] = useState([]);
   //   {
@@ -76,24 +77,22 @@ const TransitData = () => {
   // ]);
 
   useEffect(() => {
-    const web3 = new Web3(
-      new Web3.providers.HttpProvider("http://127.0.0.1:7545")
-    );
+    const web3 = new Web3(new Web3.providers.HttpProvider(network.arbitrum));
     const contract = new web3.eth.Contract(
       Transit.abi,
       Transit.contractAddress
     );
 
-    const accounts = window.ethereum
+    window.ethereum
       .request({ method: "eth_requestAccounts" })
       .then((accounts) => {
         const account = accounts[0];
-        const a = contract.methods
+        contract.methods
           .getTransitsByAddress(account)
           .call()
           .then((a) => {
             console.log(a);
-            console.log(account)
+            console.log(account);
             setData(a);
             data.map((item) => {
               console.log(item["4"]);
@@ -110,27 +109,20 @@ const TransitData = () => {
       });
   }, []);
 
-  const handleReceive = (transitId, Receiver) => {
-    const web3 = new Web3(
-      new Web3.providers.HttpProvider("http://127.0.0.1:7545")
-    );
-    const contract = new web3.eth.Contract(
+  const handleReceive = async (transitId, Receiver) => {
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const contract = new Contract(
+      Transit.contractAddress,
       Transit.abi,
-      Transit.contractAddress
+      provider
     );
 
-    const accounts = window.ethereum
-      .request({ method: "eth_requestAccounts" })
-      .then((accounts) => {
-        const account = accounts[0];
-        contract.methods
-          .startTransit(transitId, Receiver)
-          .send({ from: account, gasLimit: "272995" })
-          .then((reciept) => {
-            alert("Trasit started " + reciept.transactionHash);
-            window.location.reload(false);
-          });
-      });
+    const signer = await provider.getSigner();
+    const contractWithSigner = await contract.connect(signer);
+
+    const receipt = await contractWithSigner.startTransit(transitId, Receiver);
+    alert("Transit Started " + receipt.hash);
+    window.location.reload();
   };
 
   return (
@@ -180,7 +172,7 @@ const TransitData = () => {
                   >
                     Start Transit
                   </MDBBtn>
-                ) : (
+                ) : item.status.toString() === "1" ? (
                   <MDBBtn
                     className="btn-outline-secondary"
                     style={{
@@ -190,6 +182,8 @@ const TransitData = () => {
                   >
                     Transit Started
                   </MDBBtn>
+                ) : (
+                  <MDBBtn>Receive</MDBBtn>
                 )}
               </td>
             </tr>
