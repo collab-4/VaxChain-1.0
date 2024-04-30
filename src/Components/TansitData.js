@@ -12,68 +12,7 @@ import Transit from "../contracts/Transit2.json";
 import { set } from "firebase/database";
 const TransitData = () => {
   const [data, setData] = useState([]);
-  //   {
-  //     id: "TN101",
-  //     currentLocation: "Delhi",
-  //     nextLocation: "Mumbai",
-  //     status: "In transit",
-  //   },
-  //   {
-  //     id: "TN398",
-  //     currentLocation: "Bangalore",
-  //     nextLocation: "Chennai",
-  //     status: "In transit",
-  //   },
-  //   {
-  //     id: "TN309",
-  //     currentLocation: "Kolkata",
-  //     nextLocation: "Hyderabad",
-  //     status: "In transit",
-  //   },
-  //   {
-  //     id: "TN207",
-  //     currentLocation: "Ahmedabad",
-  //     nextLocation: "Pune",
-  //     status: "In transit",
-  //   },
-  //   {
-  //     id: "TN508",
-  //     currentLocation: "Jaipur",
-  //     nextLocation: "Lucknow",
-  //     status: "In transit",
-  //   },
-  //   {
-  //     id: "TN713",
-  //     currentLocation: "Surat",
-  //     nextLocation: "Nagpur",
-  //     status: "In transit",
-  //   },
-  //   {
-  //     id: "TN615",
-  //     currentLocation: "Visakhapatnam",
-  //     nextLocation: "Indore",
-  //     status: "In transit",
-  //   },
-  //   {
-  //     id: "TN827",
-  //     currentLocation: "Thane",
-  //     nextLocation: "Patna",
-  //     status: "In transit",
-  //   },
-  //   {
-  //     id: "TN934",
-  //     currentLocation: "Ludhiana",
-  //     nextLocation: "Agra",
-  //     status: "In transit",
-  //   },
-  //   {
-  //     id: "TN125",
-  //     currentLocation: "Varanasi",
-  //     nextLocation: "Allahabad",
-  //     status: "In transit",
-  //   },
-  //   // Add more data here...
-  // ]);
+  const loggedInEthAddress = sessionStorage.getItem("loggedInEthAddress");
 
   useEffect(() => {
     const web3 = new Web3(
@@ -110,7 +49,7 @@ const TransitData = () => {
       });
   }, []);
 
-  const handleReceive = (transitId, Receiver) => {
+  const handleStartTransit = (transitId, Receiver) => {
     const web3 = new Web3(
       new Web3.providers.HttpProvider("http://127.0.0.1:7545")
     );
@@ -128,6 +67,28 @@ const TransitData = () => {
           .send({ from: account, gasLimit: "272995" })
           .then((reciept) => {
             alert("Trasit started " + reciept.transactionHash);
+            window.location.reload(false);
+          });
+      });
+  };
+  const handleReceive = (transitId, sender) => {
+    const web3 = new Web3(
+      new Web3.providers.HttpProvider("http://127.0.0.1:7545")
+    );
+    const contract = new web3.eth.Contract(
+      Transit.abi,
+      Transit.contractAddress
+    );
+
+    const accounts = window.ethereum
+      .request({ method: "eth_requestAccounts" })
+      .then((accounts) => {
+        const account = accounts[0];
+        contract.methods
+          .receiveTransit(transitId,sender )
+          .send({ from: account, gasLimit: "272995" })
+          .then((reciept) => {
+            alert("Trasit Received " + reciept.transactionHash);
             window.location.reload(false);
           });
       });
@@ -176,9 +137,21 @@ const TransitData = () => {
                       borderColor: "var(--secondary-color)",
                       color: "var(--primary-color",
                     }}
-                    onClick={() => handleReceive(item["0"], item["2"])}
+                    onClick={() => handleStartTransit(item["0"], item["2"])}
                   >
                     Start Transit
+                  </MDBBtn>
+                ) : item.status.toString() === "1" && item.receiver.toString().toLowerCase() === loggedInEthAddress ? (
+                  <MDBBtn
+                    className="btn-secondary"
+                    style={{
+                      backgroundColor: "var(--secondary-color)",
+                      borderColor: "var(--secondary-color)",
+                      color: "var(--primary-color",
+                    }}
+                    onClick={() => handleReceive(item["0"], item["1"])}
+                  >
+                    Receive Transit
                   </MDBBtn>
                 ) : (
                   <MDBBtn
@@ -190,7 +163,10 @@ const TransitData = () => {
                   >
                     Transit Started
                   </MDBBtn>
-                )}
+                )
+                  
+                }
+                
               </td>
             </tr>
           ))}
