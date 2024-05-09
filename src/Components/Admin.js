@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import Navbar from "./navbar/navbarAdmin";
 import Footer from "./footer/footer";
-import TransitData from "./TansitData";
-import { ref, get ,remove,set } from "firebase/database";
-import { Web3 } from "web3";
+import { ref, get, remove, set } from "firebase/database";
 import Transit from "../contracts/Transit2.json";
 import avatar from "../image/avathar.png";
-import { database } from "../Components/LandingPage/firebase"; 
+import { database } from "../Components/LandingPage/firebase";
 import { Container, Row, Col } from "react-bootstrap";
+import { ethers, Contract } from "ethers";
 import {
   MDBTable,
   MDBTableBody,
@@ -16,64 +15,80 @@ import {
   MDBBadge,
   MDBInput,
 } from "mdb-react-ui-kit";
+
 function Home() {
-  const web3 = new Web3(
-    new Web3.providers.HttpProvider("http://127.0.0.1:7545")
-  );
-  const contract = new web3.eth.Contract(Transit.abi, Transit.contractAddress);
   const [transitId, setTransitId] = useState("");
   const [transitDetails, setTransitDetails] = useState(null);
   const [error, setError] = useState("");
   const [newAddress, setNewAddress] = useState("");
   const [oldAddress, setOldAddress] = useState("");
+
   const handleAddManager = async () => {
     try {
-      console.log(newAddress,"check",loggedInEthAddress);
-      await contract.methods
-        .registerManager(newAddress)
-        .send({ from: "0x66EBE61Ee12f033504e6a4F1CB7eD14d46133E91", gasLimit: '272995' });
-      alert("Manager added successfully");
-      await addNewAddressToDatabase(newAddress);
-      setNewAddress("");
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const contract = new Contract(
+        Transit.contractAddress,
+        Transit.abi,
+        provider
+      );
+      const signer = await provider.getSigner();
+      const contractWithSigner = await contract.connect(signer);
+      console.log(signer);
+      const receipt = await contractWithSigner.registerManager(newAddress);
+      alert("Registered Manager Successfully "+receipt.hash);
     } catch (error) {
       console.error("Error adding manager:", error);
       alert("Error adding manager. Please try again.");
     }
   };
+
   const addNewAddressToDatabase = async (newAddress) => {
-    
-      try {
-        const addressRef = ref(database, `/ValidUserID/${newAddress.toLowerCase()}`);
-        await set(addressRef, "manager");
-        console.log(`New address '${newAddress}' added to database with role 'manager'.`);
+    try {
+      const addressRef = ref(
+        database,
+        `/ValidUserID/${newAddress.toLowerCase()}`
+      );
+      await set(addressRef, "manager");
+      console.log(
+        `New address '${newAddress}' added to database with role 'manager'.`
+      );
     } catch (error) {
-        console.error("Error adding new address to database:", error);
+      console.error("Error adding new address to database:", error);
     }
   };
 
   const removeAddManager = async () => {
     try {
-      await contract.methods
-        .removeManager(oldAddress)
-        .send({ from: "0x66EBE61Ee12f033504e6a4F1CB7eD14d46133E91" });
-      alert("Manager removed successfully");
-      setOldAddress("");
-      await deleteAddressFromDatabase(oldAddress);
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const contract = new Contract(
+        Transit.contractAddress,
+        Transit.abi,
+        provider
+      );
+      const signer = await provider.getSigner();
+
+      const contractWithSigner = await contract.connect(signer);
+      console.log(signer);
+      const receipt = await contractWithSigner.removeManager(oldAddress);
+      alert("Removed manager successfully " + receipt.hash);
     } catch (error) {
-      console.error("Error removed manager:", error);
-      alert("Error removed manager. Please try again.");
+      console.error("Error adding manager:", error);
+      alert("Error adding manager. Please try again.");
     }
   };
 
   const deleteAddressFromDatabase = async (addressToDelete) => {
     try {
-        const addressRef = ref(database, `/address/${addressToDelete.toLowerCase()}`);
-        await remove(addressRef);
-        console.log(`Address '${addressToDelete}' deleted from the database.`);
+      const addressRef = ref(
+        database,
+        `/address/${addressToDelete.toLowerCase()}`
+      );
+      await remove(addressRef);
+      console.log(`Address '${addressToDelete}' deleted from the database.`);
     } catch (error) {
-        console.error("Error deleting address from database:", error);
+      console.error("Error deleting address from database:", error);
     }
-};
+  };
   const loggedInEthAddress = sessionStorage.getItem("loggedInEthAddress");
 
   return (
@@ -137,7 +152,6 @@ function Home() {
                 <MDBBtn style={{ margin: "10px" }} onClick={removeAddManager}>
                   Remove Manager
                 </MDBBtn>
-              
               </div>
             </Col>
             <Col>

@@ -6,22 +6,24 @@ import {
 } from "mdb-react-ui-kit";
 import Navbar from "./navbar/navbar";
 import Footer from "./footer/footer";
-import { Web3 } from "web3";
-import Transit from "../contracts/Transit2.json"; // Import your contract ABI
+import Transit from "../contracts/Transit2.json";
+import {ethers, Contract} from 'ethers';
 
 function Track() {
   const [transitId, setTransitId] = useState("");
   const [transitDetails, setTransitDetails] = useState(null);
   const [error, setError] = useState("");
 
-  const web3 = new Web3(
-    new Web3.providers.HttpProvider("http://127.0.0.1:7545")
+  const provider = new ethers.BrowserProvider(window.ethereum);
+  const contract = new Contract(
+    Transit.contractAddress,
+    Transit.abi,
+    provider
   );
-  const contract = new web3.eth.Contract(Transit.abi, Transit.contractAddress);
 
   const handleSearch = async () => {
     try {
-      const data = await contract.methods.getTransitbyID(transitId).call();
+      const data = await contract.getTransitbyID(transitId);
       setTransitDetails(data);
       console.log("fetched data by tansit", data);
       setError("");
