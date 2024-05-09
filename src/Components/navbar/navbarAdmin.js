@@ -14,6 +14,7 @@ function Navbarfunction() {
       updateNavbar(false);
     }
   }
+ 
   
  
 
@@ -29,33 +30,29 @@ function Navbarfunction() {
     >
       <Container>
         <Navbar.Brand href="/" className="d-flex align-items-center">
-          <h1 className="mb-0 ml-2">Vaxchain</h1>
+          <h1 className="mb-0 ml-2">Vaxchain-Admin</h1>
         </Navbar.Brand>
 
        
           <span></span>
           <span></span>
           <span></span>
-        
-
+          <span></span>
+          <span></span>
+          
+          
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="ms-auto" defaultActiveKey="#home">
-            <Nav.Item>
-              <Nav.Link as={Link} to="/Home" onClick={() => updateExpanded(false)}>
-                DASHBOARD
+          <Nav.Item>
+              <Nav.Link as={Link} to="/admin" onClick={() => updateExpanded(false)}>
+              DASHBOARD
               </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link as={Link} to="/Track" onClick={() => updateExpanded(false)}>
-                TRACK
+        </Nav.Item>
+          <Nav.Item>
+              <Nav.Link as={Link} to="/ManagerList" onClick={() => updateExpanded(false)}>
+              MANAGER LIST
               </Nav.Link>
-            </Nav.Item>
-
-            <Nav.Item>
-              <Nav.Link as={Link} to="/NewTransit" onClick={() => updateExpanded(false)}>
-                NEW TRANSIT
-              </Nav.Link>
-            </Nav.Item>
+        </Nav.Item>
           </Nav>
         </Navbar.Collapse>
       </Container>

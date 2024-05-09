@@ -1,0 +1,4 @@
+{
+    "ganache" : "http://127.0.0.1:7545",
+    "arbitrum" : "https://sepolia-rollup.arbitrum.io/rpc"
+}
