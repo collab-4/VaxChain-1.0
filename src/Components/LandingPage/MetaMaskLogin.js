@@ -14,6 +14,7 @@ const MetaMaskLogin = () => {
   const [loading, setLoading] = useState(false);
   const [alertMessage, setAlertMessage] = useState(); 
   const [ethereumAddress, setEthereumAddress] = useState(null);
+  const [role, setRole] = useState(null);
   const handleLogin = async () => {
     setLoading(true);
     try {
@@ -29,8 +30,14 @@ const MetaMaskLogin = () => {
 
         if (addressExists) {
           console.log("Ethereum address found in Firestore:", ethereumAddress);
-          // Redirect to /home if the Ethereum address matches
-          window.location.href = "/home";
+          sessionStorage.setItem('loggedInEthAddress', ethereumAddress);
+          console.log("stored the address in session storage as loggedInEthAddress");
+          if (role == "manager") {
+            window.location.href = "/home";
+          }
+          else if (role == "admin") {
+            window.location.href = "/admin";
+          }
         } else {
           console.error("Ethereum address not found in Firestore.");
           setAlertMessage("Ethereum address not found."); // Set alert message
@@ -56,6 +63,7 @@ const MetaMaskLogin = () => {
         console.log(snapshot.val());
         if (data && ethereumAddress in data) {
           const role = data[ethereumAddress];
+          setRole(role);
           console.log(`Ethereum ID ${ethereumAddress} is valid. Role: ${role} `);
           alert(`Ethereum ID ${ethereumAddress} is valid. Role: ${role} `);
           setEthereumAddress(ethereumAddress); 
@@ -97,7 +105,7 @@ const MetaMaskLogin = () => {
         </Nav>
       </Container>
       </Navbar>
-      <AlertBox message="try a diffrent acount" />
+      {/* <AlertBox message="try a diffrent acount" /> */}
       </div>
 
   );

@@ -6,128 +6,71 @@ import {
   MDBBtn,
   MDBBadge,
 } from "mdb-react-ui-kit";
-import SearchBar from "./SearchPage";
-import { Web3 } from "web3";
+// import SearchBar from "./SearchPage";
 import Transit from "../contracts/Transit2.json";
-import network from "../network/network.json";
 import { ethers, Contract } from "ethers";
+
 const TransitData = () => {
   const [data, setData] = useState([]);
-  //   {
-  //     id: "TN101",
-  //     currentLocation: "Delhi",
-  //     nextLocation: "Mumbai",
-  //     status: "In transit",
-  //   },
-  //   {
-  //     id: "TN398",
-  //     currentLocation: "Bangalore",
-  //     nextLocation: "Chennai",
-  //     status: "In transit",
-  //   },
-  //   {
-  //     id: "TN309",
-  //     currentLocation: "Kolkata",
-  //     nextLocation: "Hyderabad",
-  //     status: "In transit",
-  //   },
-  //   {
-  //     id: "TN207",
-  //     currentLocation: "Ahmedabad",
-  //     nextLocation: "Pune",
-  //     status: "In transit",
-  //   },
-  //   {
-  //     id: "TN508",
-  //     currentLocation: "Jaipur",
-  //     nextLocation: "Lucknow",
-  //     status: "In transit",
-  //   },
-  //   {
-  //     id: "TN713",
-  //     currentLocation: "Surat",
-  //     nextLocation: "Nagpur",
-  //     status: "In transit",
-  //   },
-  //   {
-  //     id: "TN615",
-  //     currentLocation: "Visakhapatnam",
-  //     nextLocation: "Indore",
-  //     status: "In transit",
-  //   },
-  //   {
-  //     id: "TN827",
-  //     currentLocation: "Thane",
-  //     nextLocation: "Patna",
-  //     status: "In transit",
-  //   },
-  //   {
-  //     id: "TN934",
-  //     currentLocation: "Ludhiana",
-  //     nextLocation: "Agra",
-  //     status: "In transit",
-  //   },
-  //   {
-  //     id: "TN125",
-  //     currentLocation: "Varanasi",
-  //     nextLocation: "Allahabad",
-  //     status: "In transit",
-  //   },
-  //   // Add more data here...
-  // ]);
+  const loggedInEthAddress = sessionStorage.getItem("loggedInEthAddress");
 
   useEffect(() => {
-    const web3 = new Web3(new Web3.providers.HttpProvider(network.arbitrum));
-    const contract = new web3.eth.Contract(
-      Transit.abi,
-      Transit.contractAddress
-    );
-
-    window.ethereum
-      .request({ method: "eth_requestAccounts" })
-      .then((accounts) => {
-        const account = accounts[0];
-        contract.methods
-          .getTransitsByAddress(account)
-          .call()
-          .then((a) => {
-            console.log(a);
-            console.log(account);
-            setData(a);
-            data.map((item) => {
-              console.log(item["4"]);
-            });
-          });
-        // Assuming fetchedData is the object containing the fetched data
-
-        // const mappedData = a.map(item => ({
-        //   id: item[0],
-        //   status: item[1]
-        // }));
-        // console.log(mappedData);
-        // setData(a)
-      });
+    async function getData() {
+      try {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const contract = new Contract(
+          Transit.contractAddress,
+          Transit.abi,
+          provider
+        );
+        const accounts = await provider.listAccounts();
+        const a = await contract.getTransitsByAddress(accounts[0]);
+        setData(a);
+      } catch (err) {
+        console.log("Error getting data");
+      }
+    }
+    getData();
   }, []);
 
-  const handleReceive = async (transitId, Receiver) => {
+  const handleStartTransit = async (transitId, Receiver) => {
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const contract = new Contract(
+        Transit.contractAddress,
+        Transit.abi,
+        provider
+      );
+
+      const signer = await provider.getSigner();
+      const contractWithSigner = await contract.connect(signer);
+
+      const receipt = await contractWithSigner.startTransit(
+        transitId,
+        Receiver
+      );
+      alert("Transit Started " + receipt.hash);
+      window.location.reload();
+    } catch (err) {
+      console.log("Error Starting Transit");
+    }
+  };
+  const handleReceive = async (transitId, sender) => {
     const provider = new ethers.BrowserProvider(window.ethereum);
     const contract = new Contract(
       Transit.contractAddress,
       Transit.abi,
       provider
     );
-
     const signer = await provider.getSigner();
     const contractWithSigner = await contract.connect(signer);
-
-    const receipt = await contractWithSigner.startTransit(transitId, Receiver);
-    alert("Transit Started " + receipt.hash);
+    const receipt = await contractWithSigner.receiveTransit(transitId, sender);
+    alert("Transit Received " + receipt.hash);
     window.location.reload();
   };
 
   return (
     <div>
-      <SearchBar />
       <MDBTable>
         <MDBTableHead>
           <tr>
@@ -168,9 +111,23 @@ const TransitData = () => {
                       borderColor: "var(--secondary-color)",
                       color: "var(--primary-color",
                     }}
-                    onClick={() => handleReceive(item["0"], item["2"])}
+                    onClick={() => handleStartTransit(item["0"], item["2"])}
                   >
                     Start Transit
+                  </MDBBtn>
+                ) : item.status.toString() === "1" &&
+                  item.receiver.toString().toLowerCase() ===
+                    loggedInEthAddress ? (
+                  <MDBBtn
+                    className="btn-secondary"
+                    style={{
+                      backgroundColor: "var(--secondary-color)",
+                      borderColor: "var(--secondary-color)",
+                      color: "var(--primary-color",
+                    }}
+                    onClick={() => handleReceive(item["0"], item["1"])}
+                  >
+                    Receive Transit
                   </MDBBtn>
                 ) : item.status.toString() === "1" ? (
                   <MDBBtn
@@ -182,8 +139,16 @@ const TransitData = () => {
                   >
                     Transit Started
                   </MDBBtn>
-                ) : (
-                  <MDBBtn>Receive</MDBBtn>
+                ) : item.status.toString() === "4" ? null : (
+                  <MDBBtn
+                    className="btn-outline-secondary"
+                    style={{
+                      borderColor: "var(--secondary-color)",
+                      color: "var(--secondary-color)",
+                    }}
+                  >
+                    RECEIVED
+                  </MDBBtn>
                 )}
               </td>
             </tr>

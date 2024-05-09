@@ -15,11 +15,11 @@ function NewTransitPage() {
   const [batchId, setBatchId] = useState("");
   const [receiverLocation, setReceiverLocation] = useState("");
   const [transitId, setTransitId] = useState("");
-  const handleGenerateTransitId = () => {
-    // Generate a random transit ID (e.g., using a UUID library)
-    const newTransitId = "TN" + Math.floor(Math.random() * 1000);
-    setTransitId(newTransitId);
-  };
+  // const handleGenerateTransitId = () => {
+  //   // Generate a random transit ID (e.g., using a UUID library)
+  //   const newTransitId = "TN" + Math.floor(Math.random() * 1000);
+  //   setTransitId(newTransitId);
+  // };
   
   // const web3 = new Web3(web3.currentProvider);
   // const contract = new web3.eth.Contract(Transit.abi, Transit.contractAddress);
@@ -69,13 +69,7 @@ function NewTransitPage() {
         <div className="mb-3">
           <MDBInput label='Receiver Location' id='receiverLocation' type='text' value={receiverLocation} onChange={(e) => setReceiverLocation(e.target.value)} required />
         </div>
-        <div className="mb-3">
-          <label htmlFor="transitId" className="form-label">Transit ID</label>
-          <div className="input-group">
-            <input type="text" className="form-control" id="transitId" value={transitId} readOnly />
-            <button type="button" className="btn btn-outline-secondary" onClick={handleGenerateTransitId}>Generate</button>
-          </div>
-        </div>
+        
         <MDBBtn type='submit'>Submit</MDBBtn>
       </form>
     </div>
@@ -86,5 +80,4 @@ function NewTransitPage() {
     </div>
   );
 }
-
 export default NewTransitPage;
