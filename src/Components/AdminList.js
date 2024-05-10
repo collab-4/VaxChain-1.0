@@ -28,9 +28,10 @@ const ManagerTable = () => {
         const snapshot = await get(managersRef);
         if (snapshot.exists()) {
           const data = snapshot.val();
-          const managerList = Object.entries(data).map(([managerID, role]) => ({
+          const managerList = Object.entries(data).map(([managerID, details]) => ({
             managerID,
-            role,
+            role: details.role,
+            location: details.location, // Assuming location is stored inside 'location' field
           }));
           setManagers(managerList);
         } else {
@@ -40,6 +41,7 @@ const ManagerTable = () => {
         console.error("Error fetching data from Firebase:", error);
       }
     };
+    
 
     fetchData();
   }, []);
@@ -63,20 +65,27 @@ const ManagerTable = () => {
               >
                 {/* <h2>Manager Table</h2> */}
                 <MDBTable>
-                  <MDBTableHead>
-                    <tr>
-                      <th><strong>MANAGER ID</strong></th>
-                      <th><strong>ROLE</strong></th>
-                    </tr>
-                  </MDBTableHead>
-                  <MDBTableBody>
-                    {managers.map((manager, index) => (
-                      <tr key={index}>
-                        <td>{manager.managerID}</td>
-                        <td>{manager.role}</td>
-                      </tr>
-                    ))}
-                  </MDBTableBody>
+                <MDBTableHead>
+  <tr>
+    <th><strong>MANAGER ID</strong></th>
+    <th><strong>ROLE</strong></th>
+    <th><strong>LOCATION</strong></th> {/* New column for location */}
+  </tr>
+</MDBTableHead>
+<MDBTableBody>
+  {managers.map((manager, index) => (
+    manager.role !== 'admin' && ( // Check if role is not admin
+      <tr key={index}>
+        <td>{manager.managerID}</td>
+        <td>{manager.role}</td>
+        <td>{manager.location}</td>
+      </tr>
+    )
+  ))}
+</MDBTableBody>
+
+
+
                 </MDBTable>
               </div>
             </Col>
