@@ -101,8 +101,7 @@ function NewTransitPage() {
   onChange={(e) => setReceiverLocation(e.target.value)}
   required
 >
-  <option value="">Select Receiver Location</option>
-  <option value="painavu">painavu</option>
+  <option value="painavu">Painavu</option>
   <option value="Location 2">Location 2</option>
   <option value="Location 3">Location 3</option>
   {/* Add more options as needed */}
