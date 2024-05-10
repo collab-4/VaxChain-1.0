@@ -3,7 +3,7 @@ import Navbar from "./navbar/navbarAdmin";
 import Footer from "./footer/footer";
 import { ref, get, remove, set } from "firebase/database";
 import Transit from "../contracts/Transit2.json";
-import avatar from "../image/avathar.png";
+import adminLogo from "../image/adminLogo.png";
 import { database } from "../Components/LandingPage/firebase";
 import { Container, Row, Col } from "react-bootstrap";
 import { ethers, Contract } from "ethers";
@@ -173,11 +173,11 @@ function Home() {
               </div>
             </Col>
             <Col>
-              <div className="box" style={{ width: "300px", height: "500px" }}>
+              <div className="box" style={{ width: "300px", height: "530px" }}>
                 <img
-                  src={avatar}
+                  src={adminLogo}
                   alt="avathar.png"
-                  style={{ width: "150px", padding: "20px" }}
+                  style={{ width: "250px", padding: "20px" }}
                 />
                 <hr />
                 <h2>Account ID</h2>

@@ -43,12 +43,12 @@ function Home() {
                   style={{
                     wordWrap: "break-word",
                     overflow: "hidden",
-                    padding: "10px",
+                    padding: "5px",
                   }}
                 >
                   {loggedInEthAddress}
                 </p>
-                <h3>location</h3>
+                <h3>Location</h3>
                 <p style={{ wordWrap: "break-word", overflow: "hidden" }}>
                   {location}
                 </p>
