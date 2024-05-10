@@ -4,6 +4,8 @@ import Footer from "./footer/footer";
 import { MDBInput, MDBBtn } from "mdb-react-ui-kit";
 import Transit from "../contracts/Transit2.json";
 import Alertbox from "./Alertbox";
+import { ref, get, remove, set } from "firebase/database";
+import { database } from "../Components/LandingPage/firebase";
 import { ethers, Contract } from "ethers";
 
 function NewTransitPage() {
@@ -20,12 +22,14 @@ function NewTransitPage() {
     const accounts = await provider.listAccounts();
     const signer = await provider.getSigner();
 
+    const recierverID = await getReceiverID(receiverLocation);
+    console.log("fetched ID:",recierverID);
     const contractWithSigner = await contract.connect(signer);
     console.log(signer);
     const receipt = await contractWithSigner.createTransit(
       batchId,
       accounts[0],
-      receiverLocation
+      recierverID
     );
     alert("Transit created successfully " + receipt.hash);
 
@@ -39,6 +43,31 @@ function NewTransitPage() {
     setReceiverLocation("");
     setTransitId("");
   };
+  const getReceiverID = async (receiverLocation) => {
+    try {
+      const managersRef = ref(database, "/ValidUserID/");
+      const snapshot = await get(managersRef);
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        const addresses = Object.keys(data);
+        for (let i = 0; i < addresses.length; i++) {
+          const address = addresses[i];
+          if (data[address].location === receiverLocation) {
+            return address; // Found matching receiver location, return Ethereum address
+          }
+        }
+        console.log("No Ethereum address found for the receiver location.");
+        return null;
+      } else {
+        console.log("ValidUserID branch does not exist or has no data");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching data from Firebase:", error);
+      return null;
+    }
+  };
+  
   return (
     <div
       style={{
@@ -65,14 +94,20 @@ function NewTransitPage() {
                 />
               </div>
               <div className="mb-3">
-                <MDBInput
-                  label="Receiver Location"
-                  id="receiverLocation"
-                  type="text"
-                  value={receiverLocation}
-                  onChange={(e) => setReceiverLocation(e.target.value)}
-                  required
-                />
+                <select
+                  class="form-select" 
+  id="receiverLocation"
+  value={receiverLocation}
+  onChange={(e) => setReceiverLocation(e.target.value)}
+  required
+>
+  <option value="">Select Receiver Location</option>
+  <option value="painavu">painavu</option>
+  <option value="Location 2">Location 2</option>
+  <option value="Location 3">Location 3</option>
+  {/* Add more options as needed */}
+</select>
+
               </div>
 
               <MDBBtn type="submit">Submit</MDBBtn>

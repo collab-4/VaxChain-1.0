@@ -3,10 +3,10 @@ import Navbar from "./navbar/navbarAdmin";
 import Footer from "./footer/footer";
 import TransitData from "./TansitData";
 import { ref, get, remove, set } from "firebase/database";
+import { database } from "../Components/LandingPage/firebase";
 import { Web3 } from "web3";
 import Transit from "../contracts/Transit2.json";
 import avatar from "../image/avathar.png";
-import { database } from "../Components/LandingPage/firebase";
 import { Container, Row, Col } from "react-bootstrap";
 import {
   MDBTable,
