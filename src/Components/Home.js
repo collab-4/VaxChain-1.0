@@ -7,6 +7,7 @@ import avatar from "../image/avathar.png";
 import { Container, Row, Col } from "react-bootstrap";
 function Home() {
   const loggedInEthAddress = sessionStorage.getItem("loggedInEthAddress");
+  const location = sessionStorage.getItem("location");
 
   return (
     <div
@@ -46,6 +47,10 @@ function Home() {
                   }}
                 >
                   {loggedInEthAddress}
+                </p>
+                <h3>location</h3>
+                <p style={{ wordWrap: "break-word", overflow: "hidden" }}>
+                  {location}
                 </p>
                 <h3>Role</h3>
                 <p style={{ wordWrap: "break-word", overflow: "hidden" }}>
