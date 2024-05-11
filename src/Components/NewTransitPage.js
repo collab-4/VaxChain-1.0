@@ -8,11 +8,13 @@ import { ref, get, remove, set } from "firebase/database";
 import { database } from "../Components/LandingPage/firebase";
 import { ethers, Contract } from "ethers";
 
+import LoadingAnimation from "./loadingAnimation/loadingAnimation";
+
 function NewTransitPage() {
   const [batchId, setBatchId] = useState("");
   const [receiverLocation, setReceiverLocation] = useState("");
   const [transitId, setTransitId] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const provider = new ethers.BrowserProvider(window.ethereum);
 
   const contract = new Contract(Transit.contractAddress, Transit.abi, provider);
@@ -23,19 +25,21 @@ function NewTransitPage() {
     const signer = await provider.getSigner();
 
     const recierverID = await getReceiverID(receiverLocation);
-    console.log("fetched ID:",recierverID);
+    console.log("fetched ID:", recierverID);
     const contractWithSigner = await contract.connect(signer);
+    setLoading(true);
     console.log(signer);
     const receipt = await contractWithSigner.createTransit(
       batchId,
       accounts[0],
       recierverID
     );
-    alert("Transit created successfully " + receipt.hash);
 
+    setLoading(false);
+    alert("Transit created successfully " + receipt.hash);
     console.log("Form submitted with data:", {
       batchId,
-      receiverLocation,
+      recierverID,
       transitId,
     });
     // Reset form fields
@@ -67,7 +71,7 @@ function NewTransitPage() {
       return null;
     }
   };
-  
+
   return (
     <div
       style={{
@@ -78,7 +82,9 @@ function NewTransitPage() {
       }}
     >
       <Navbar />
-      <div style={{ paddingTop: "80px", flex: 1 }}>
+      <div style={{ paddingTop: "80px", flex: 1, position: "relative" }}>
+        {loading && <LoadingAnimation loadingText="Transation is procesing" />}
+
         <div className="box" style={{ width: "700px", height: "500px" }}>
           <div className="container">
             <h1>Add New Transit</h1>
@@ -95,18 +101,18 @@ function NewTransitPage() {
               </div>
               <div className="mb-3">
                 <select
-                  class="form-select" 
-  id="receiverLocation"
-  value={receiverLocation}
-  onChange={(e) => setReceiverLocation(e.target.value)}
-  required
->
-  <option value="painavu">Painavu</option>
-  <option value="Location 2">Location 2</option>
-  <option value="Location 3">Location 3</option>
-  {/* Add more options as needed */}
-</select>
-
+                  class="form-select"
+                  id="receiverLocation"
+                  value={receiverLocation}
+                  onChange={(e) => setReceiverLocation(e.target.value)}
+                  required
+                >
+                  <option value="">Select Receiver Location</option>
+                  <option value="painavu">painavu</option>
+                  <option value="Location 2">Location 2</option>
+                  <option value="Location 3">Location 3</option>
+                  {/* Add more options as needed */}
+                </select>
               </div>
 
               <MDBBtn type="submit">Submit</MDBBtn>

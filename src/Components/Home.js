@@ -1,7 +1,6 @@
 import React from "react";
 import Navbar from "./navbar/navbar";
 import Footer from "./footer/footer";
-// import { MDBIcon, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 import TransitData from "./TansitData";
 import avatar from "../image/avathar.png";
 import { Container, Row, Col } from "react-bootstrap";
@@ -19,7 +18,7 @@ function Home() {
       }}
     >
       <Navbar />
-      <div style={{ paddingTop: "80px", flex: 1 }}>
+      <div style={{ paddingTop: "80px", flex: 1,position:"relative"}}>
         <Container>
           <Row>
             <Col>
