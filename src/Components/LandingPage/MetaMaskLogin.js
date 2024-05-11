@@ -27,18 +27,19 @@ const MetaMaskLogin = () => {
         const accounts = await window.ethereum.request({ method: "eth_accounts" });
         const ethereumAddress = accounts[0]; 
         
-        const addressExists = await checkEthereumAddressExists(ethereumAddress);
-
-        if (addressExists) {
+        const gotRole = await checkEthereumAddressExists(ethereumAddress);
+        
+        if (gotRole) {
           console.log("Ethereum address found in Firestore:", ethereumAddress);
           sessionStorage.setItem('loggedInEthAddress', ethereumAddress);
           sessionStorage.setItem('location', location);
-
+          sessionStorage.setItem('role', gotRole);
           console.log("stored the address in session storage as loggedInEthAddress");
-          if (role == "manager") {
+         
+          if (gotRole == "manager") {
             window.location.href = "/home";
           }
-          else if (role == "admin") {
+          else if (gotRole == "admin") {
             window.location.href = "/admin";
           }
         } else {
@@ -66,7 +67,7 @@ const MetaMaskLogin = () => {
       if (snapshot.exists()) {
         const data = snapshot.val();
         console.log(data);
-        
+        // setRole(data.role);
         const role = data.role; // Assuming the role is stored directly under the Ethereum address
         setRole(role);
         const location = data.location;
@@ -74,9 +75,10 @@ const MetaMaskLogin = () => {
         
         console.log(`Ethereum ID ${ethereumAddress} is valid. Role: ${role}`);
         alert(`Ethereum ID ${ethereumAddress} is valid. Role: ${role} `);
+        
         setEthereumAddress(ethereumAddress);
         
-        return role; // Return the role if needed
+        return role; 
       } else {
         console.log(`Ethereum ID ${ethereumAddress} not found in ValidUserID`);
         return null;

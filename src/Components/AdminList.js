@@ -6,7 +6,7 @@ import { ref, get, remove, set } from "firebase/database";
 import { database } from "../Components/LandingPage/firebase";
 import { Web3 } from "web3";
 import Transit from "../contracts/Transit2.json";
-import avatar from "../image/avathar.png";
+import avatar from "../image/adminLogo.png";
 import { Container, Row, Col } from "react-bootstrap";
 import {
   MDBTable,
@@ -94,7 +94,7 @@ const ManagerTable = () => {
                 <img
                   src={avatar}
                   alt="avathar.png"
-                  style={{ width: "150px", padding: "20px" }}
+                  style={{ width: "230px", padding: "20px" }}
                 />
                 <hr />
                 <h2>Account ID</h2>
