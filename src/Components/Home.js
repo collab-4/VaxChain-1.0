@@ -1,12 +1,14 @@
-import React from "react";
+import { React,useState } from "react";
 import Navbar from "./navbar/navbar";
 import Footer from "./footer/footer";
 import TransitData from "./TansitData";
 import avatar from "../image/avathar.png";
 import { Container, Row, Col } from "react-bootstrap";
+
 function Home() {
   const loggedInEthAddress = sessionStorage.getItem("loggedInEthAddress");
   const location = sessionStorage.getItem("location");
+  
 
   return (
     <div
@@ -25,7 +27,8 @@ function Home() {
               <div
                 className="scrollable-box"
                 style={{ width: "800px", height: "500px" }}
-              >
+              >       
+
                 <TransitData />
               </div>
             </Col>

@@ -9,14 +9,18 @@ import {
 // import SearchBar from "./SearchPage";
 import Transit from "../contracts/Transit2.json";
 import { ethers, Contract } from "ethers";
-
+import Loadingripple from "./loadingAnimation/loadingRipple";
+import LoadingAnimation from "./loadingAnimation/loadingAnimation";
 const TransitData = () => {
   const [data, setData] = useState([]);
   const loggedInEthAddress = sessionStorage.getItem("loggedInEthAddress");
+  const [loading2, setLoading2] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function getData() {
       try {
+        setLoading2(true);
         const provider = new ethers.BrowserProvider(window.ethereum);
         const contract = new Contract(
           Transit.contractAddress,
@@ -26,15 +30,18 @@ const TransitData = () => {
         const accounts = await provider.listAccounts();
         const a = await contract.getTransitsByAddress(accounts[0]);
         setData(a);
+        setLoading2(false)
       } catch (err) {
         console.log("Error getting data");
       }
+
     }
     getData();
   }, []);
 
   const handleStartTransit = async (transitId, Receiver) => {
-    try {
+    try { 
+      setLoading(true);
       const provider = new ethers.BrowserProvider(window.ethereum);
       const contract = new Contract(
         Transit.contractAddress,
@@ -49,6 +56,7 @@ const TransitData = () => {
         transitId,
         Receiver
       );
+      setLoading(false);
       alert("Transit Started " + receipt.hash);
       window.location.reload();
     } catch (err) {
@@ -56,6 +64,7 @@ const TransitData = () => {
     }
   };
   const handleReceive = async (transitId, sender) => {
+    setLoading(true);
     const provider = new ethers.BrowserProvider(window.ethereum);
     const contract = new Contract(
       Transit.contractAddress,
@@ -65,12 +74,16 @@ const TransitData = () => {
     const signer = await provider.getSigner();
     const contractWithSigner = await contract.connect(signer);
     const receipt = await contractWithSigner.receiveTransit(transitId, sender);
+    setLoading(false);
     alert("Transit Received " + receipt.hash);
     window.location.reload();
   };
 
   return (
-    <div>
+    <div>        
+        {loading && <LoadingAnimation loadingText="Transation is procesing" />}
+
+          {loading2 && <Loadingripple />}
       <MDBTable>
         <MDBTableHead>
           <tr>
@@ -79,6 +92,8 @@ const TransitData = () => {
             <th>Status</th>
             <th>Action</th>
           </tr>
+          
+      
         </MDBTableHead>
         <MDBTableBody>
           {data.map((item) => (

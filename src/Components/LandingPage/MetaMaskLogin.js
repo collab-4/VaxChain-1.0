@@ -9,6 +9,8 @@ import { ref, get  } from "firebase/database";
 import AlertBox from "../Alertbox";
 import "./navbar1.css";
 import Home from "../Home";
+import LoadingAnimation from "../loadingAnimation/loadingAnimation";
+
 
 const MetaMaskLogin = () => {
   const [loading, setLoading] = useState(false);
@@ -75,7 +77,6 @@ const MetaMaskLogin = () => {
         setLocation(location);
         
         console.log(`Ethereum ID ${ethereumAddress} is valid. Role: ${role}`);
-        alert(`Ethereum ID ${ethereumAddress} is valid. Role: ${role} `);
         
         setEthereumAddress(ethereumAddress);
         
@@ -113,8 +114,10 @@ const MetaMaskLogin = () => {
           </Nav.Item>
         </Nav>
       </Container>
+      {loading && <LoadingAnimation loadingText="" />}
       </Navbar>
       {/* <AlertBox message="try a diffrent acount" /> */}
+
       </div>
 
   );

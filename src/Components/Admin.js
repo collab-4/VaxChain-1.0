@@ -7,6 +7,7 @@ import adminLogo from "../image/adminLogo.png";
 import { database } from "../Components/LandingPage/firebase";
 import { Container, Row, Col } from "react-bootstrap";
 import { ethers, Contract } from "ethers";
+import LoadingAnimation from "./loadingAnimation/loadingAnimation";
 import {
   MDBTable,
   MDBTableBody,
@@ -23,9 +24,11 @@ function Home() {
   const [newAddress, setNewAddress] = useState("");
   const [newLocation, setNewLocation] = useState("");
   const [oldAddress, setOldAddress] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleAddManager = async () => {
     try {
+      setLoading(true)
       const provider = new ethers.BrowserProvider(window.ethereum);
       const contract = new Contract(
         Transit.contractAddress,
@@ -36,11 +39,15 @@ function Home() {
       const contractWithSigner = await contract.connect(signer);
       console.log(signer);
       const receipt = await contractWithSigner.registerManager(newAddress);
+      setLoading(false);
       alert("Registered Manager Successfully " + receipt.hash);
       await addNewAddressToDatabase(newAddress,newLocation);
       setNewAddress("");
+      
     } catch (error) {
       console.error("Error adding manager:", error);
+      setLoading(false);
+      setNewAddress("");
       alert("Error adding manager. Please try again.");
     }
   };
@@ -67,6 +74,7 @@ function Home() {
   
   const removeAddManager = async () => {
     try {
+      setLoading(true);
       const provider = new ethers.BrowserProvider(window.ethereum);
       const contract = new Contract(
         Transit.contractAddress,
@@ -80,9 +88,12 @@ function Home() {
       const receipt = await contractWithSigner.removeManager(oldAddress);
       alert("Removed manager successfully " + receipt.hash);
       await deleteAddressFromDatabase(oldAddress);
+      setLoading(false);
       setOldAddress("");
     } catch (error) {
       console.error("Error adding manager:", error);
+      setLoading(false);
+      setOldAddress("");
       alert("Error adding manager. Please try again.");
     }
   };
@@ -109,8 +120,10 @@ function Home() {
       }}
     >
       <Navbar />
-      <div style={{ paddingTop: "80px", flex: 1 }}>
+      <div style={{ paddingTop: "80px", flex: 1 , position: "relative" }}>
+            {loading && <LoadingAnimation loadingText="Transation is procesing" />}
         <Container>
+
           <Row>
             <Col>
               <div
@@ -121,7 +134,7 @@ function Home() {
                   textAlign: "left",
                   padding: "30px",
                 }}
-              >
+                >
                 <h3>Add manager</h3>
                 <hr />
                 <div >
