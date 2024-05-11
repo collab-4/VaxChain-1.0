@@ -7,7 +7,7 @@ import Alertbox from "./Alertbox";
 import { ref, get, remove, set } from "firebase/database";
 import { database } from "../Components/LandingPage/firebase";
 import { ethers, Contract } from "ethers";
-
+import CryptoJS from 'crypto-js';
 import LoadingAnimation from "./loadingAnimation/loadingAnimation";
 
 function NewTransitPage() {
@@ -18,9 +18,10 @@ function NewTransitPage() {
   const provider = new ethers.BrowserProvider(window.ethereum);
 
   const contract = new Contract(Transit.contractAddress, Transit.abi, provider);
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const accounts = await provider.listAccounts();
     const signer = await provider.getSigner();
 

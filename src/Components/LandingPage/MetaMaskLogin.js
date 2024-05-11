@@ -32,7 +32,6 @@ const MetaMaskLogin = () => {
         if (gotRole) {
           console.log("Ethereum address found in Firestore:", ethereumAddress);
           sessionStorage.setItem('loggedInEthAddress', ethereumAddress);
-          sessionStorage.setItem('location', location);
           sessionStorage.setItem('role', gotRole);
           console.log("stored the address in session storage as loggedInEthAddress");
          
@@ -71,6 +70,8 @@ const MetaMaskLogin = () => {
         const role = data.role; // Assuming the role is stored directly under the Ethereum address
         setRole(role);
         const location = data.location;
+        sessionStorage.setItem('location', location);
+
         setLocation(location);
         
         console.log(`Ethereum ID ${ethereumAddress} is valid. Role: ${role}`);
