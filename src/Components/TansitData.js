@@ -118,7 +118,9 @@ const TransitData = () => {
                 )}
               </td>
               <td>
-                {item.status.toString() === "0" ? (
+                {item.status.toString() === "0"  &&
+                  item.sender.toString().toLowerCase() ===
+                    loggedInEthAddress ? (
                   <MDBBtn
                     className="btn-secondary"
                     style={{
