@@ -26,7 +26,7 @@ function Home() {
             <Col>
               <div
                 className="scrollable-box"
-                style={{ width: "800px", height: "500px" }}
+                style={{ width: "900px", height: "500px" }}
               >       
 
                 <TransitData />
