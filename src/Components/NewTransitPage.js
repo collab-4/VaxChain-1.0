@@ -7,7 +7,7 @@ import Alertbox from "./Alertbox";
 import { ref, get, remove, set } from "firebase/database";
 import { database } from "../Components/LandingPage/firebase";
 import { ethers, Contract } from "ethers";
-import CryptoJS from 'crypto-js';
+// import CryptoJS from 'crypto-js';
 import LoadingAnimation from "./loadingAnimation/loadingAnimation";
 
 function NewTransitPage() {
@@ -110,8 +110,8 @@ function NewTransitPage() {
                 >
                   <option value="">Select Receiver Location</option>
                   <option value="painavu">painavu</option>
-                  <option value="Location 2">Location 2</option>
-                  <option value="Location 3">Location 3</option>
+                  <option value="thrissur">thrissur</option>
+                  <option value="kannur">kannur</option>
                   {/* Add more options as needed */}
                 </select>
               </div>
