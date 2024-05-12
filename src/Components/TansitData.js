@@ -156,7 +156,8 @@ const TransitData = () => {
                   >
                     Transit Started
                   </MDBBtn>
-                ) : item.status.toString() === "4" ? null : (
+                ) : item.status.toString() === "4" ? null : 
+                item.status.toString() === "2" && item.receiver.toString().toLowerCase() ===loggedInEthAddress ?(
                   <MDBBtn
                     className="btn-outline-secondary"
                     style={{
@@ -166,7 +167,7 @@ const TransitData = () => {
                   >
                     RECEIVED
                   </MDBBtn>
-                )}
+                ):null}
               </td>
             </tr>
           ))}
