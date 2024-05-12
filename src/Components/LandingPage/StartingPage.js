@@ -28,7 +28,7 @@ const StartingPage = () => {
 
   const handleCheckStatus = async () => {
     try {
-      const data = await contract.getTransitbyID(vaccineId);
+      const data = await contract.getTransitbyID(vaccineId,{from: '0xbb66120cC5186E1Ba93BB26dd91AB1FFC090bA22'});
 
       if (data.status.toString() >=3) {
         setStatus("NOT SAFE");
