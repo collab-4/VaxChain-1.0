@@ -44,7 +44,7 @@ function Navbarfunction() {
           <span></span>
           <span></span>
           <span></span>
-          <span></span>
+    
           </Navbar.Toggle>
           
         <Navbar.Collapse id="responsive-navbar-nav">
@@ -57,6 +57,11 @@ function Navbarfunction() {
           <Nav.Item>
               <Nav.Link as={Link} to="/ManagerList" onClick={() => updateExpanded(false)}>
               MANAGER LIST
+              </Nav.Link>
+        </Nav.Item>
+          <Nav.Item>
+              <Nav.Link as={Link} to="/AllTransit" onClick={() => updateExpanded(false)}>
+              ALL TRANSITS
               </Nav.Link>
         </Nav.Item>
           </Nav>

@@ -81,7 +81,7 @@ const TransitData = () => {
 
   return (
     <div>        
-        {loading && <LoadingAnimation loadingText="Transation is procesing" />}
+        {loading && <LoadingAnimation loadingText="Transaction is processing" />}
 
           {loading2 && <Loadingripple />}
       <MDBTable>

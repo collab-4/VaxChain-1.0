@@ -121,7 +121,7 @@ function Home() {
     >
       <Navbar />
       <div style={{ paddingTop: "80px", flex: 1 , position: "relative" }}>
-            {loading && <LoadingAnimation loadingText="Transation is procesing" />}
+            {loading && <LoadingAnimation loadingText="Transaction is processing" />}
         <Container>
 
           <Row>

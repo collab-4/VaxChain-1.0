@@ -84,7 +84,7 @@ function NewTransitPage() {
     >
       <Navbar />
       <div style={{ paddingTop: "80px", flex: 1, position: "relative" }}>
-        {loading && <LoadingAnimation loadingText="Transation is procesing" />}
+        {loading && <LoadingAnimation loadingText="Transaction is processing" />}
 
         <div className="box" style={{ width: "700px", height: "500px" }}>
           <div className="container">
