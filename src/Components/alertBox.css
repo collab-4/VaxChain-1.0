@@ -1,0 +1,35 @@
+.alert{
+    /* position: absolute; */
+      /* top: 60px; */
+      /* transform: translateX(99.99%); */
+      width: 400px;
+      height: 500px;
+      /* justify-content: left; */
+      box-shadow: 0 0 10px rgba(26, 23, 69, 0.368); 
+      /* align-items: center; */
+      /* opacity: 0; */
+      /* background-color: rgb(238, 0, 0); */
+      z-index: 10001;
+    
+      box-shadow: 10px;
+      /* transition: opacity 0.3s ease-in-out; */
+    }
+    .alertScreen {
+        position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+        
+        z-index: 10000;
+        /* margin: 0;
+        padding: 0;
+        width: 100vh;
+        height: 100vh; */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(255, 255, 255, 0.447);
+        backdrop-filter: blur(10px) ;
+       
+      }
