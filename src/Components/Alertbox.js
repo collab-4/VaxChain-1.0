@@ -3,6 +3,7 @@ import "./alertBox.css";
 import { MDBBtn } from "mdb-react-ui-kit";
 import success from "../image/correct.png";
 import error from "../image/error.png";
+import networkError from "../image/networkError.png";
 import { Button } from "react-bootstrap";
 const AlertBox = ({ title, type, message, onClose }) => {
   // const [visible, setVisible] = useState(true);
@@ -30,14 +31,14 @@ const AlertBox = ({ title, type, message, onClose }) => {
           />
         ) : (
           <img
-            src="https://morrisseytravel.com/wp-content/uploads/2017/03/alert-icon.png"
-            alt="correct.png"
-            style={{ width: "300px", padding: "20px" }}
+            src={networkError}
+            alt="ERROR.png"
+            style={{ width: "250px", padding: "20px" }}
           />
         )}
 
-        <h2>{title}</h2>
-        <p className="mb-0">{message}</p>
+        <h2 style={{ wordWrap: "break-word", overflow: "hidden" }}>{title}</h2>
+        <p className="mb-0" style={{ wordWrap: "break-word", overflow: "hidden" }}>{message}</p>
         <br />
         <Button style={{ width: "100px", margin: "10px" }} onClick={onClose}>
           OK

@@ -14,10 +14,22 @@ import LoadingAnimation from "../loadingAnimation/loadingAnimation";
 
 const MetaMaskLogin = () => {
   const [loading, setLoading] = useState(false);
-  const [alertMessage, setAlertMessage] = useState(); 
   const [ethereumAddress, setEthereumAddress] = useState(null);
   const [role, setRole] = useState(null);
   const [location, setLocation] = useState(null);
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [AlertMessage, setAlertMessage] = useState("");
+  const [AlertType, setAlertType] = useState("");
+  const [AlertTitle, setAlertTitle] = useState("");
+  const handleShowAlert = () => {
+    setShowAlert(true);
+  };
+
+  const handleCloseAlert = () => {
+    setShowAlert(false);
+  };
+
   const handleLogin = async () => {
     setLoading(true);
     try {
@@ -45,15 +57,24 @@ const MetaMaskLogin = () => {
           }
         } else {
           console.error("Ethereum address not found in Firestore.");
-          setAlertMessage("Ethereum address not found."); // Set alert message
+          setAlertMessage("try login with another metamask user."); // Set alert message
+          setAlertTitle("Oops! Looks like you're not authorized for this.");
+        setAlertType("");
+        handleShowAlert();
         }
       } else {
         console.error("MetaMask is not installed.");
         setAlertMessage("MetaMask is not installed."); // Set alert message
+        setAlertTitle("Sorry ,something went wrong ");
+        setAlertType("");
+        handleShowAlert();
       }
     } catch (error) {
       console.error("Error logging in with MetaMask:", error);
       setAlertMessage("Error logging in with MetaMask."); // Set alert message
+      setAlertTitle("Sorry ,something went wrong ");
+      setAlertType("");
+      handleShowAlert();
     } finally {
       setLoading(false);
     }
@@ -116,7 +137,14 @@ const MetaMaskLogin = () => {
       </Container>
       {loading && <LoadingAnimation loadingText="" />}
       </Navbar>
-      {/* <AlertBox message="try a diffrent acount" /> */}
+      {showAlert && (
+        <AlertBox
+          title={AlertTitle} 
+          type={AlertType} 
+          message={AlertMessage}
+          onClose={handleCloseAlert}
+        />
+      )}
 
       </div>
 

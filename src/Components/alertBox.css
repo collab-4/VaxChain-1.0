@@ -3,15 +3,15 @@
       /* top: 60px; */
       /* transform: translateX(99.99%); */
       width: 400px;
-      height: 500px;
+      height: 530px;
       /* justify-content: left; */
       box-shadow: 0 0 10px rgba(26, 23, 69, 0.368); 
       /* align-items: center; */
       /* opacity: 0; */
       /* background-color: rgb(238, 0, 0); */
       z-index: 10001;
+     overflow:auto;
     
-      box-shadow: 10px;
       /* transition: opacity 0.3s ease-in-out; */
     }
     .alertScreen {

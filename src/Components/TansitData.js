@@ -8,6 +8,7 @@ import {
 } from "mdb-react-ui-kit";
 // import SearchBar from "./SearchPage";
 import Transit from "../contracts/Transit2.json";
+import AlertBox from "./Alertbox";
 import { ethers, Contract } from "ethers";
 import Loadingripple from "./loadingAnimation/loadingRipple";
 import LoadingAnimation from "./loadingAnimation/loadingAnimation";
@@ -16,6 +17,19 @@ const TransitData = () => {
   const loggedInEthAddress = sessionStorage.getItem("loggedInEthAddress");
   const [loading2, setLoading2] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [AlertMessage, setAlertMessage] = useState("");
+  const [AlertType, setAlertType] = useState("");
+  const [AlertTitle, setAlertTitle] = useState("");
+  const handleShowAlert = () => {
+    setShowAlert(true);
+  };
+
+  const handleCloseAlert = () => {
+    setShowAlert(false);
+    window.location.reload();
+  };
 
   useEffect(() => {
     async function getData() {
@@ -57,8 +71,12 @@ const TransitData = () => {
         Receiver
       );
       setLoading(false);
-      alert("Transit Started " + receipt.hash);
-      window.location.reload();
+      setAlertMessage(receipt.hash);
+      setAlertTitle("Transit Started");
+      setAlertType("success");
+      handleShowAlert();
+      // alert("Transit Started " + receipt.hash);
+      // window.location.reload();
     } catch (err) {
       console.log("Error Starting Transit");
     }
@@ -75,15 +93,27 @@ const TransitData = () => {
     const contractWithSigner = await contract.connect(signer);
     const receipt = await contractWithSigner.receiveTransit(transitId, sender);
     setLoading(false);
-    alert("Transit Received " + receipt.hash);
-    window.location.reload();
+    setLoading(false);
+    setAlertMessage(receipt.hash);
+    setAlertTitle("Transit Received");
+    setAlertType("success");
+    handleShowAlert();
+    // window.location.reload();
   };
 
   return (
     <div>        
         {loading && <LoadingAnimation loadingText="Transaction is processing" />}
 
-          {loading2 && <Loadingripple />}
+      {loading2 && <Loadingripple />}
+      {showAlert && (
+        <AlertBox
+          title={AlertTitle} 
+          type={AlertType} 
+          message={AlertMessage}
+          onClose={handleCloseAlert}
+        />
+      )}
       <MDBTable>
         <MDBTableHead>
           <tr>
