@@ -25,6 +25,7 @@ const AllTransit = () => {
   const loggedInEthAddress = sessionStorage.getItem("loggedInEthAddress");
   const [loading2, setLoading2] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [transitDetails, setTransitDetails] = useState(null);
   const provider = new ethers.BrowserProvider(window.ethereum);
   const contract = new Contract(
     Transit.contractAddress,
@@ -48,11 +49,18 @@ const AllTransit = () => {
     getData();
   }, []);
 
-  const handleData = async (transitId) => {
-    const accounts = provider.listAccounts();
-    const result = await contract.getTransitbyID(transitId,{from: '0x50a27acdef01c7f29ca0ceb911516c59706ba4a8'});
-    console.log(result.receiver);
-    return result;
+  const handleDetails = async (transitId) => {
+    try {
+        const accounts = await provider.listAccounts();
+        const data = await contract.getTransitbyID(transitId,{from:accounts[0]});
+        setTransitDetails(data);
+        console.log("fetched data by tansit", data);
+        // setError("");
+      } catch (error) {
+        console.error("Error fetching transit details:", error);
+        setTransitDetails(null);
+        // setError("Error fetching transit details. Please try again.");
+      }
   }
 
   return (
@@ -71,15 +79,13 @@ const AllTransit = () => {
             <Col>
               <div
                 className="scrollable-box"
-                style={{ width: "800px", height: "500px" }}
+                style={{ width: "500px", height: "500px" }}
               >
                 {/* <h2>Manager Table</h2> */}
                 <MDBTable>
                   <MDBTableHead>
                     <tr>
                       <th>Transit ID</th>
-                      <th>Receiver</th>
-                      <th>Status</th>
                       <th>Action</th>
                     </tr>
                   </MDBTableHead>
@@ -87,10 +93,10 @@ const AllTransit = () => {
                     {data.map((item) => (
                         
                       <tr key={item.transitId}>
-                        <td>{item.transitId.toString()}</td>
-                        <td>{console.log(handleData(item.transitId).receiver)}</td>
-                        <td>{result.sender}</td>                        
-                        
+                        <td>{item.transitId.toString()}</td>                      
+                        <td>
+                            <MDBBtn onClick={() => handleDetails(item.transitId)}>Details</MDBBtn>
+                        </td>
                       </tr>
                     ))}
                   </MDBTableBody>
@@ -98,27 +104,65 @@ const AllTransit = () => {
               </div>
             </Col>
             <Col>
-              <div className="box" style={{ width: "300px", height: "500px" }}>
-                <img
-                  src={avatar}
-                  alt="avathar.png"
-                  style={{ width: "230px", padding: "20px" }}
-                />
-                <hr />
-                <h2>Account ID</h2>
-                <p
-                  style={{
-                    wordWrap: "break-word",
-                    overflow: "hidden",
-                    padding: "10px",
-                  }}
-                >
-                  {loggedInEthAddress}
-                </p>
-                <h3>Role</h3>
-                <p style={{ wordWrap: "break-word", overflow: "hidden" }}>
-                  Administrator
-                </p>
+              <div className="scrollable-box" style={{ width: "500px", height: "500px" ,overflow:"hidden",padding:"10px"}}>
+                <h2 style={{padding:"10px"}}>Transit Details</h2>
+                <hr/>
+              {transitDetails && (
+                <div >
+                  <div style={{ margin: "10px" }}>
+                    <strong>Transit ID:</strong>{" "}
+                    {transitDetails.transitId.toString()}
+                  </div>
+                  <div style={{ margin: "10px" }}>
+                    <strong>Status:</strong>{" "}
+                    {transitDetails.status.toString() === "0" ? (
+                  <MDBBadge>PENDING</MDBBadge>
+                ) : transitDetails.status.toString() === "1" ? (
+                  <MDBBadge className="mx-2" color="secondary" light>
+                    IN TRANSIT
+                  </MDBBadge>
+                ) : transitDetails.status.toString() === "2" ? (
+                  <MDBBadge color="success" light>
+                    RECEIVED
+                  </MDBBadge>
+                ) : (
+                  <MDBBadge className="mx-2" color="danger" light>
+                    TEMPERATURE BREACH
+                  </MDBBadge>
+                )}
+                  </div>
+                  <div style={{ margin: "10px" }}>
+                    <strong>Sender:</strong> {transitDetails.sender}
+                  </div>
+                  <div style={{ margin: "10px" }}>
+                    <strong>Receiver:</strong> {transitDetails.receiver}
+                  </div>
+                  <div style={{ margin: "10px" }}>
+                    <strong>Delivery Time:</strong>{" "}
+                    {transitDetails.deliveryTime !== undefined
+                      ? transitDetails.deliveryTime.toString() === "0"
+                        ? "Not Yet Delivered"
+                        : new Date(
+                            Number(transitDetails.deliveryTime) * 1000
+                          ).toLocaleString()
+                      : "NIL"}
+                    <br />
+                    {/* Display more details based on the returned data */}
+                  </div>
+
+                  <div style={{ margin: "10px" }}>
+                    <strong>Pickup Time:</strong>{" "}
+                    {transitDetails.pickupTime !== undefined
+                      ? transitDetails.pickupTime.toString() === "0"
+                        ? "Not yet Picked up"
+                        : new Date(
+                            Number(transitDetails.pickupTime) * 1000
+                          ).toLocaleString()
+                      : "NIL"}
+                    <br />
+                  </div>
+                </div>
+              )}
               </div>
             </Col>
           </Row>

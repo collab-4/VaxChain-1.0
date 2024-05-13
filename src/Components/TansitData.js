@@ -51,6 +51,22 @@ const TransitData = () => {
 
     }
     getData();
+    async function eventListener() {
+      try {
+        const provider = new ethers.WebSocketProvider("wss://arbitrum-sepolia.infura.io/ws/v3/49f12cee9190495eb0587a0180543527");
+        const contract = new Contract(
+          Transit.contractAddress,
+          Transit.abi,
+          provider
+        );
+        contract.on('Tampered',(sender, message,event) => {
+          window.location.reload();
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    eventListener();
   }, []);
 
   const handleStartTransit = async (transitId, Receiver) => {
