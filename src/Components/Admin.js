@@ -1,31 +1,39 @@
 import React, { useState } from "react";
 import Navbar from "./navbar/navbarAdmin";
 import Footer from "./footer/footer";
-import { ref, get, remove, set } from "firebase/database";
+import { ref, remove, set } from "firebase/database";
 import Transit from "../contracts/Transit2.json";
 import adminLogo from "../image/adminLogo.png";
 import { database } from "../Components/LandingPage/firebase";
 import { Container, Row, Col } from "react-bootstrap";
 import { ethers, Contract } from "ethers";
 import LoadingAnimation from "./loadingAnimation/loadingAnimation";
+import AlertBox from "./Alertbox";
 import {
-  MDBTable,
-  MDBTableBody,
-  MDBTableHead,
   MDBBtn,
-  MDBBadge,
-  MDBInput,
+  MDBInput
 } from "mdb-react-ui-kit";
 
+
 function Home() {
-  const [transitId, setTransitId] = useState("");
-  const [transitDetails, setTransitDetails] = useState(null);
-  const [error, setError] = useState("");
+  // const [transitId, setTransitId] = useState("");
+  // const [transitDetails, setTransitDetails] = useState(null);
+  // const [error, setError] = useState("");
   const [newAddress, setNewAddress] = useState("");
   const [newLocation, setNewLocation] = useState("");
   const [oldAddress, setOldAddress] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [AlertMessage, setAlertMessage] = useState("");
+  const [AlertType, setAlertType] = useState("");
+  const [AlertTitle, setAlertTitle] = useState("");
+  const handleShowAlert = () => {
+    setShowAlert(true);
+  };
 
+  const handleCloseAlert = () => {
+    setShowAlert(false);
+  };
   const handleAddManager = async () => {
     try {
       setLoading(true)
@@ -40,7 +48,10 @@ function Home() {
       console.log(signer);
       const receipt = await contractWithSigner.registerManager(newAddress);
       setLoading(false);
-      alert("Registered Manager Successfully " + receipt.hash);
+      setAlertMessage(receipt.hash);
+      setAlertTitle("Registered Manager Successfully");
+      setAlertType("success")
+      handleShowAlert();
       await addNewAddressToDatabase(newAddress,newLocation);
       setNewAddress("");
       
@@ -48,7 +59,11 @@ function Home() {
       console.error("Error adding manager:", error);
       setLoading(false);
       setNewAddress("");
-      alert("Error adding manager. Please try again.");
+      setAlertMessage(" Please try again.");
+      setAlertTitle("Error adding manager");
+      setAlertType("error")
+      handleShowAlert();
+      // alert("Error adding manager. Please try again.");
     }
   };
 
@@ -86,7 +101,11 @@ function Home() {
       const contractWithSigner = await contract.connect(signer);
       console.log(signer);
       const receipt = await contractWithSigner.removeManager(oldAddress);
-      alert("Removed manager successfully " + receipt.hash);
+      setAlertMessage(receipt.hash);
+      setAlertTitle("Removed manager successfully");
+      setAlertType("success")
+      handleShowAlert();
+      // alert("Removed manager successfully " + receipt.hash);
       await deleteAddressFromDatabase(oldAddress);
       setLoading(false);
       setOldAddress("");
@@ -94,7 +113,11 @@ function Home() {
       console.error("Error adding manager:", error);
       setLoading(false);
       setOldAddress("");
-      alert("Error adding manager. Please try again.");
+      // alert("Error adding manager. Please try again.");
+      setAlertMessage(" Please try again.");
+      setAlertTitle("Error adding manager");
+      setAlertType("error")
+      handleShowAlert();
     }
   };
 
@@ -121,7 +144,15 @@ function Home() {
     >
       <Navbar />
       <div style={{ paddingTop: "80px", flex: 1 , position: "relative" }}>
-            {loading && <LoadingAnimation loadingText="Transaction is processing" />}
+        {loading && <LoadingAnimation loadingText="Transaction is processing" />}
+        {showAlert && (
+        <AlertBox
+          title={AlertTitle} 
+          type={AlertType} 
+          message={AlertMessage}
+          onClose={handleCloseAlert}
+        />
+      )}
         <Container>
 
           <Row>
