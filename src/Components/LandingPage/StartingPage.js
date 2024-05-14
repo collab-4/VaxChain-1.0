@@ -16,6 +16,7 @@ import {
 import Login from "./MetaMaskLogin";
 import { ethers, Contract } from "ethers";
 import Transit from "../../contracts/Transit2.json";
+import AlertBox from "../Alertbox";
 import { database } from "./firebase";
 import { ref, get } from "firebase/database";
 const StartingPage = () => {
@@ -23,61 +24,82 @@ const StartingPage = () => {
 
   const [vaccineId, setVaccineId] = useState("");
   const [status, setStatus] = useState(null);
-  const provider = new ethers.BrowserProvider(window.ethereum);
-  const contract = new Contract(Transit.contractAddress, Transit.abi, provider);
+  const [showAlert, setShowAlert] = useState(false);
+  const [AlertMessage, setAlertMessage] = useState("");
+  const [AlertType, setAlertType] = useState("");
+  const [AlertTitle, setAlertTitle] = useState("");
+  const handleShowAlert = () => {
+    setShowAlert(true);
+  };
 
-  const handleCheckStatus = async () => {
-    try {
-      const data = await contract.getTransitbyID(vaccineId,{from: '0xbb66120cC5186E1Ba93BB26dd91AB1FFC090bA22'});
+  const handleCloseAlert = () => {
+    setShowAlert(false);
+  };
+  // console.log("umpi");
+  // if (!window.ethereum) {
+    
+  // } 
+ 
+    const handleCheckStatus = async () => {
+      try {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+      
+        const contract = new Contract(Transit.contractAddress, Transit.abi, provider);
+        const data = await contract.getTransitbyID(vaccineId, { from: '0xbb66120cC5186E1Ba93BB26dd91AB1FFC090bA22' });
 
-      if (data.status.toString() >=3) {
-        setStatus("NOT SAFE");
-      } else {
-        setStatus("SAFE");
+        if (data.status.toString() >= 3) {
+          setStatus("NOT SAFE");
+        } else {
+          setStatus("SAFE");
+        }
+        console.log("fetched data by tansit", data);
+        setVaccineId("");
+      } catch (error) {
+        console.error("Error fetching transit details:", error);
+        setStatus(null);
+        console.error("MetaMask is not installed.");
+    setAlertMessage("MetaMask is not installed."); // Set alert message
+    setAlertTitle("Sorry ,something went wrong ");
+    setAlertType("");
+    handleShowAlert();
       }
-      console.log("fetched data by tansit", data);
-      setVaccineId("");
-    } catch (error) {
-      console.error("Error fetching transit details:", error);
-      setStatus(null);
-    }
 
-  };
-
-  const toggleOpen = () => {
-    setCentredModal(!centredModal);
-  };
+    };
+  
+    const toggleOpen = () => {
+      setCentredModal(!centredModal);
+    };
 
   return (
     <div>
       <MDBContainer
         fluid
         className="starting-page min-vh-100 p-4  background-radial-gradient "
-      >
+        >
         <MDBContainer>
           <Login />
           <MDBRow className=" h-100" style={{ paddingTop: "200px" }}>
             <MDBCol
               md="6"
               className=" d-flex flex-column align-items-center justify-content-center"
-            >
+              >
               <h1
                 className="my-10 display-1 fw-bold ls-tight "
                 style={{ color: "hsl(218, 81%, 95%)", font: "Prompt" }}
-              >
+                >
                 VaxChain <br />
               </h1>
               <p
                 className="px-3 my-10"
                 style={{ color: "hsl(218, 81%, 85%)", font: "Prompt" }}
-              >
+                >
                 Securing vaccine integrity through blockchain technology
               </p>
             </MDBCol>
             <MDBCol
               md="6"
               className="position-relative justify-content-center align-items-center"
-            >
+              >
               <h1 className="my-5 display-10 fw-bold ls-tight px-3 text-white">
                 Check your vaccine validity{" "}
               </h1>
@@ -86,11 +108,12 @@ const StartingPage = () => {
                 className="w-100 mb-4 btn-lg light"
                 size="md"
                 onClick={toggleOpen}
-              >
+                >
                 Check Validity of your vaccine{" "}
               </MDBBtn>
             </MDBCol>
           </MDBRow>
+          
           <MDBModal tabIndex="-1" open={centredModal} setOpen={setCentredModal}>
             <MDBModalDialog centered size="lg">
               <MDBModalContent>
@@ -100,7 +123,7 @@ const StartingPage = () => {
                     className="btn-close"
                     color="none"
                     onClick={toggleOpen}
-                  ></MDBBtn>
+                    ></MDBBtn>
                 </MDBModalHeader>
                 <MDBModalBody>
                   <div style={{ padding: "10px" }}>
@@ -111,9 +134,11 @@ const StartingPage = () => {
                       lable="vaccine ID"
                       value={vaccineId}
                       onChange={(e) => setVaccineId(e.target.value)}
-                    />
+                      />
                   </div>
+                      {/* {window.ethereum?( */}
                   <MDBBtn onClick={handleCheckStatus}>Check Status</MDBBtn>
+                
 
                   <div className="mt-3">
                     {/* {status && ( */}
@@ -135,9 +160,16 @@ const StartingPage = () => {
               </MDBModalContent>
             </MDBModalDialog>
           </MDBModal>
-         
         </MDBContainer>
       </MDBContainer>
+      {showAlert && (
+        <AlertBox
+          title={AlertTitle} 
+          type={AlertType} 
+          message={AlertMessage}
+          onClose={handleCloseAlert}
+        />
+      )}
     </div>
   );
 };
