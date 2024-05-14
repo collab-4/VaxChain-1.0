@@ -10,6 +10,7 @@ import ManagerList from './Components/AdminList';
 import Navbar from './Components/navbar/navbar';
 import NewTransitPage from './Components/NewTransitPage';
 import Track from './Components/Track';
+import AllTransit from './Components/AllTransit';
 function App() {
   const [ethereumAddress, setEthereumAddress] = useState('');
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/Track" element={<Track />} />
           <Route path="/Admin" element={<Admin />} />
           <Route path="/ManagerList" element={<ManagerList />} />
+          <Route path="/AllTransit" element={<AllTransit />} />
         </Routes>
       </div>
     </BrowserRouter>

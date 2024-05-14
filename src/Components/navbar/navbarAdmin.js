@@ -4,6 +4,7 @@ import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
 import { Link } from "react-router-dom";
 import "./navbar.css";
+import { NavbarToggle } from "react-bootstrap";
 function Navbarfunction() {
   const [expand, updateExpanded] = useState(false);
   const [navColour, updateNavbar] = useState(false);
@@ -33,13 +34,18 @@ function Navbarfunction() {
           <h1 className="mb-0 ml-2">Vaxchain-Admin</h1>
         </Navbar.Brand>
 
-       
+        <Navbar.Toggle
+          aria-controls="responsive-navbar-nav"
+          onClick={() => {
+            updateExpanded(expand ? false : "expanded");
+          }}
+        >
           <span></span>
           <span></span>
           <span></span>
           <span></span>
-          <span></span>
-          
+    
+          </Navbar.Toggle>
           
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="ms-auto" defaultActiveKey="#home">
@@ -51,6 +57,11 @@ function Navbarfunction() {
           <Nav.Item>
               <Nav.Link as={Link} to="/ManagerList" onClick={() => updateExpanded(false)}>
               MANAGER LIST
+              </Nav.Link>
+        </Nav.Item>
+          <Nav.Item>
+              <Nav.Link as={Link} to="/AllTransit" onClick={() => updateExpanded(false)}>
+              ALL TRANSITS
               </Nav.Link>
         </Nav.Item>
           </Nav>

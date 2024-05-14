@@ -9,12 +9,27 @@ import { ref, get  } from "firebase/database";
 import AlertBox from "../Alertbox";
 import "./navbar1.css";
 import Home from "../Home";
+import LoadingAnimation from "../loadingAnimation/loadingAnimation";
+
 
 const MetaMaskLogin = () => {
   const [loading, setLoading] = useState(false);
-  const [alertMessage, setAlertMessage] = useState(); 
   const [ethereumAddress, setEthereumAddress] = useState(null);
   const [role, setRole] = useState(null);
+  const [location, setLocation] = useState(null);
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [AlertMessage, setAlertMessage] = useState("");
+  const [AlertType, setAlertType] = useState("");
+  const [AlertTitle, setAlertTitle] = useState("");
+  const handleShowAlert = () => {
+    setShowAlert(true);
+  };
+
+  const handleCloseAlert = () => {
+    setShowAlert(false);
+  };
+
   const handleLogin = async () => {
     setLoading(true);
     try {
@@ -26,29 +41,40 @@ const MetaMaskLogin = () => {
         const accounts = await window.ethereum.request({ method: "eth_accounts" });
         const ethereumAddress = accounts[0]; 
         
-        const addressExists = await checkEthereumAddressExists(ethereumAddress);
-
-        if (addressExists) {
+        const gotRole = await checkEthereumAddressExists(ethereumAddress);
+        
+        if (gotRole) {
           console.log("Ethereum address found in Firestore:", ethereumAddress);
           sessionStorage.setItem('loggedInEthAddress', ethereumAddress);
+          sessionStorage.setItem('role', gotRole);
           console.log("stored the address in session storage as loggedInEthAddress");
-          if (role == "manager") {
+         
+          if (gotRole == "manager") {
             window.location.href = "/home";
           }
-          else if (role == "admin") {
+          else if (gotRole == "admin") {
             window.location.href = "/admin";
           }
         } else {
           console.error("Ethereum address not found in Firestore.");
-          setAlertMessage("Ethereum address not found."); // Set alert message
+          setAlertMessage("try login with another metamask user."); // Set alert message
+          setAlertTitle("Oops! Looks like you're not authorized for this.");
+        setAlertType("");
+        handleShowAlert();
         }
       } else {
         console.error("MetaMask is not installed.");
         setAlertMessage("MetaMask is not installed."); // Set alert message
+        setAlertTitle("Sorry ,something went wrong ");
+        setAlertType("");
+        handleShowAlert();
       }
     } catch (error) {
       console.error("Error logging in with MetaMask:", error);
       setAlertMessage("Error logging in with MetaMask."); // Set alert message
+      setAlertTitle("Sorry ,something went wrong ");
+      setAlertType("");
+      handleShowAlert();
     } finally {
       setLoading(false);
     }
@@ -56,24 +82,28 @@ const MetaMaskLogin = () => {
 
   const checkEthereumAddressExists = async (ethereumAddress) => {
     try {
-      console.log("loged in account ", ethereumAddress);
-      const snapshot = await get(ref(database, "/ValidUserID"));
+      console.log("Logged in account:", ethereumAddress);
+      const addressRef = ref(database, `/ValidUserID/${ethereumAddress.toLowerCase()}`);
+      const snapshot = await get(addressRef);
+      
       if (snapshot.exists()) {
         const data = snapshot.val();
-        console.log(snapshot.val());
-        if (data && ethereumAddress in data) {
-          const role = data[ethereumAddress];
-          setRole(role);
-          console.log(`Ethereum ID ${ethereumAddress} is valid. Role: ${role} `);
-          alert(`Ethereum ID ${ethereumAddress} is valid. Role: ${role} `);
-          setEthereumAddress(ethereumAddress); 
-          return role; // Return the role if needed
-        } else {
-          console.log(`Ethereum ID ${ethereumAddress} not found in ValidEthID`);
-          return null;
-        }
+        console.log(data);
+        // setRole(data.role);
+        const role = data.role; // Assuming the role is stored directly under the Ethereum address
+        setRole(role);
+        const location = data.location;
+        sessionStorage.setItem('location', location);
+
+        setLocation(location);
+        
+        console.log(`Ethereum ID ${ethereumAddress} is valid. Role: ${role}`);
+        
+        setEthereumAddress(ethereumAddress);
+        
+        return role; 
       } else {
-        console.log("ValidEthID branch does not exist or has no data");
+        console.log(`Ethereum ID ${ethereumAddress} not found in ValidUserID`);
         return null;
       }
     } catch (error) {
@@ -81,6 +111,7 @@ const MetaMaskLogin = () => {
       return null;
     }
   };
+  
 
   return (
     <div>
@@ -104,8 +135,17 @@ const MetaMaskLogin = () => {
           </Nav.Item>
         </Nav>
       </Container>
+      {loading && <LoadingAnimation loadingText="" />}
       </Navbar>
-      {/* <AlertBox message="try a diffrent acount" /> */}
+      {showAlert && (
+        <AlertBox
+          title={AlertTitle} 
+          type={AlertType} 
+          message={AlertMessage}
+          onClose={handleCloseAlert}
+        />
+      )}
+
       </div>
 
   );

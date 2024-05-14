@@ -63,14 +63,5 @@
     border-bottom-right-radius: 0.25rem;
   }
 
-  .alert{
-  /* position: absolute; */
-    top: 60px;
-    /* transform: translateX(99.99%); */
-    /* width: 50%; */
-    justify-content: left;
-    /* align-items: center; */
-    opacity: 80;
-    transition: opacity 0.3s ease-in-out;
-  }
+
  

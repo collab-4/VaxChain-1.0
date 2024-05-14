@@ -1,21 +1,51 @@
 import React, { useState, useEffect } from "react";
-
-const Alertbox = ({ message }) => {
-  const [visible, setVisible] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setVisible(false);
-    }, 390000); // Set the delay time in milliseconds (e.g., 5000 ms = 5 seconds)
-
-    return () => clearTimeout(timer); // Clear the timer on component unmount
-  }, []);
+import "./alertBox.css";
+import { MDBBtn } from "mdb-react-ui-kit";
+import success from "../image/correct.png";
+import error from "../image/error.png";
+import networkError from "../image/networkError.png";
+import { Button } from "react-bootstrap";
+const AlertBox = ({ title, type, message, onClose }) => {
+  // const [visible, setVisible] = useState(true);
+  // const alertClose = () => {
+  //   setVisible(false);
+  // };
 
   return (
-    <div className={`alert data-mdb-offset ${visible ? "alert-light" : "d-none"} `} role="alert">
-      <p className="mb-0">{message}</p>
+    <div className={`alertScreen`}>
+      <div
+        className={`alert alert-light`}
+        style={{ backgroundColor: "white", boxShadow: "10px" }}
+      >
+        {type == "success" ? (
+          <img
+            src={success}
+            alt="correct.png"
+            style={{ width: "300px", padding: "20px" }}
+          />
+        ) : type == "error" ? (
+          <img
+            src={error}
+            alt="correct.png"
+            style={{ width: "300px", padding: "20px" }}
+          />
+        ) : (
+          <img
+            src={networkError}
+            alt="ERROR.png"
+            style={{ width: "250px", padding: "20px" }}
+          />
+        )}
+
+        <h2 style={{ wordWrap: "break-word", overflow: "hidden" }}>{title}</h2>
+        <p className="mb-0" style={{ wordWrap: "break-word", overflow: "hidden" }}>{message}</p>
+        <br />
+        <Button style={{ width: "100px", margin: "10px" }} onClick={onClose}>
+          OK
+        </Button>
+      </div>
     </div>
   );
 };
 
-export default Alertbox;
+export default AlertBox;

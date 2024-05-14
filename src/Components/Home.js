@@ -1,12 +1,14 @@
-import React from "react";
+import { React,useState } from "react";
 import Navbar from "./navbar/navbar";
 import Footer from "./footer/footer";
-// import { MDBIcon, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 import TransitData from "./TansitData";
 import avatar from "../image/avathar.png";
 import { Container, Row, Col } from "react-bootstrap";
+
 function Home() {
   const loggedInEthAddress = sessionStorage.getItem("loggedInEthAddress");
+  const location = sessionStorage.getItem("location");
+  
 
   return (
     <div
@@ -18,14 +20,15 @@ function Home() {
       }}
     >
       <Navbar />
-      <div style={{ paddingTop: "80px", flex: 1 }}>
+      <div style={{ paddingTop: "80px", flex: 1,position:"relative"}}>
         <Container>
           <Row>
             <Col>
               <div
                 className="scrollable-box"
-                style={{ width: "800px", height: "500px" }}
-              >
+                style={{ width: "900px", height: "500px" }}
+              >       
+
                 <TransitData />
               </div>
             </Col>
@@ -42,10 +45,14 @@ function Home() {
                   style={{
                     wordWrap: "break-word",
                     overflow: "hidden",
-                    padding: "10px",
+                    padding: "5px",
                   }}
                 >
                   {loggedInEthAddress}
+                </p>
+                <h3>Location</h3>
+                <p style={{ wordWrap: "break-word", overflow: "hidden" }}>
+                  {location}
                 </p>
                 <h3>Role</h3>
                 <p style={{ wordWrap: "break-word", overflow: "hidden" }}>

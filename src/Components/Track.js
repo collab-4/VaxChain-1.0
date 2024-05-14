@@ -23,7 +23,8 @@ function Track() {
 
   const handleSearch = async () => {
     try {
-      const data = await contract.getTransitbyID(transitId);
+      const accounts = await provider.listAccounts();
+      const data = await contract.getTransitbyID(transitId,{from:accounts[0]});
       setTransitDetails(data);
       console.log("fetched data by tansit", data);
       setError("");
