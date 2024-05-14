@@ -136,19 +136,21 @@ function NewTransitPage() {
                 />
               </div>
               <div className="mb-3">
-                <select
-                  class="form-select"
+                <MDBInput
+                  label="Receiver Location"
+                  type="text"
+                  // class="form-select"
                   id="receiverLocation"
                   value={receiverLocation}
                   onChange={(e) => setReceiverLocation(e.target.value)}
                   required
                 >
-                  <option value="">Select Receiver Location</option>
+                  {/* <option value="">Select Receiver Location</option>
                   <option value="painavu">painavu</option>
                   <option value="thrissur">thrissur</option>
                   <option value="kannur">kannur</option>
-                  {/* Add more options as needed */}
-                </select>
+                  Add more options as needed */}
+                </MDBInput>
               </div>
 
               <MDBBtn type="submit">Submit</MDBBtn>
