@@ -12,12 +12,14 @@ import AlertBox from "./Alertbox";
 import { ethers, Contract } from "ethers";
 import Loadingripple from "./loadingAnimation/loadingRipple";
 import LoadingAnimation from "./loadingAnimation/loadingAnimation";
+import { database } from "./LandingPage/firebase";
+import { ref, get  } from "firebase/database";
 const TransitData = () => {
   const [data, setData] = useState([]);
   const loggedInEthAddress = sessionStorage.getItem("loggedInEthAddress");
   const [loading2, setLoading2] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const [location, setLocation] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [AlertMessage, setAlertMessage] = useState("");
   const [AlertType, setAlertType] = useState("");
@@ -41,12 +43,28 @@ const TransitData = () => {
           Transit.abi,
           provider
         );
+
         const accounts = await provider.listAccounts();
-        const a = await contract.getTransitsByAddress(accounts[0]);
+        let a = await contract.getTransitsByAddress(accounts[0]);
+        console.log("data",a);
         setData(a);
+        const arrayOfLoactions = ["hahah"];
+        for (let i = 0; i < a.length; i++){
+          console.log(a[i]);
+          let b = await getLocationFromID(a[i].receiver);
+          // console.log("b", a[i].receiver);
+          // a[i].receiver = b;
+          console.log("b",b);
+          console.log(a[i].receiver);
+          const newElement = 1;
+          arrayOfLoactions.push(b);
+          // setLocation([...location,]);
+        }
+        setLocation(arrayOfLoactions);
+        console.log("a:",location[1]);
         setLoading2(false)
       } catch (err) {
-        console.log("Error getting data");
+        console.log("Error getting data",err);
       }
 
     }
@@ -59,8 +77,10 @@ const TransitData = () => {
           Transit.abi,
           provider
         );
-        contract.on('Tampered',(sender, message,event) => {
-          window.location.reload();
+        contract.on('Tampered', (sender, message, event) => {
+          setTimeout(() => {
+            window.location.reload();
+        }, 5000);
         });
       } catch (error) {
         console.log(error);
@@ -117,6 +137,27 @@ const TransitData = () => {
     // window.location.reload();
   };
 
+  const getLocationFromID =  async(ethereumAddress) => {
+    try {
+      console.log("getLocationFromID",ethereumAddress);
+      const addressRef = ref(database, `/ValidUserID/${ethereumAddress.toLowerCase()}`);
+      const snapshot = await get(addressRef);
+      
+      console.log("pass ",snapshot.val());
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        const location = data.location;
+        return location; 
+        // setLocation(location);
+      } else {
+        return "no exit";
+      }
+    } catch (error) {
+      console.log("Error fetching data PLace from Firebase:", error);
+      return "hjhjjh";
+    }
+  };
+  
   return (
     <div>        
         {loading && <LoadingAnimation loadingText="Transaction is processing" />}
@@ -134,7 +175,7 @@ const TransitData = () => {
         <MDBTableHead>
           <tr>
             <th>Transit ID</th>
-            <th>Receiver</th>
+            <th>Receiver location</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
@@ -142,10 +183,11 @@ const TransitData = () => {
       
         </MDBTableHead>
         <MDBTableBody>
-          {data.map((item) => (
+          {data.map((item,index) => (
             <tr key={item.transitId}>
               <td>{item.transitId.toString()}</td>
-              <td>{item.receiver}</td>
+              <td> {location[index+1]}</td>
+              {/* <td>{item.receiver}</td> */}
               <td>
                 {item.status.toString() === "0" ? (
                   <MDBBadge>PENDING</MDBBadge>
