@@ -1,30 +1,28 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./navbar/navbarAdmin";
 import Footer from "./footer/footer";
-import TransitData from "./TansitData";
-import { ref, get, remove, set } from "firebase/database";
-import { database } from "../Components/LandingPage/firebase";
+// import TransitData from "./TansitData";
+// import { ref, get, remove, set } from "firebase/database";
+// import { database } from "../Components/LandingPage/firebase";
 import { ethers, Contract } from "ethers";
 
 import Transit from "../contracts/Transit2.json";
-import avatar from "../image/adminLogo.png";
 import { Container, Row, Col } from "react-bootstrap";
 import {
   MDBTable,
   MDBTableBody,
   MDBTableHead,
   MDBBtn,
-  MDBBadge,
-  MDBInput,
+  MDBBadge
 } from "mdb-react-ui-kit";
 
 const AllTransit = () => {
-  const [managers, setManagers] = useState([]);
+  // const [managers, setManagers] = useState([]);
   const [data, setData] = useState([]);
-  const [result, setResult] = useState([]);
-  const loggedInEthAddress = sessionStorage.getItem("loggedInEthAddress");
-  const [loading2, setLoading2] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // const [result, setResult] = useState([]);
+  // const loggedInEthAddress = sessionStorage.getItem("loggedInEthAddress");
+  // const [loading2, setLoading2] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [transitDetails, setTransitDetails] = useState(null);
   const provider = new ethers.BrowserProvider(window.ethereum);
   const contract = new Contract(
@@ -36,12 +34,12 @@ const AllTransit = () => {
   useEffect(() => {
     async function getData() {
       try {
-        setLoading2(true);
+        // setLoading2(true);
         const accounts = await provider.listAccounts();
         const a = await contract.getAllTransits({ from: accounts[0] });
         console.log("a:", a);
         setData(a);
-        setLoading2(false);
+        // setLoading2(false);
       } catch (err) {
         console.log("Error getting data");
       }

@@ -8,15 +8,14 @@ import { database } from "./firebase";
 import { ref, get  } from "firebase/database";
 import AlertBox from "../Alertbox";
 import "./navbar1.css";
-import Home from "../Home";
 import LoadingAnimation from "../loadingAnimation/loadingAnimation";
 
 
 const MetaMaskLogin = () => {
   const [loading, setLoading] = useState(false);
-  const [ethereumAddress, setEthereumAddress] = useState(null);
-  const [role, setRole] = useState(null);
-  const [location, setLocation] = useState(null);
+  // const [ethereumAddress, setEthereumAddress] = useState(null);
+  // const [role, setRole] = useState(null);
+  // const [location, setLocation] = useState(null);
 
   const [showAlert, setShowAlert] = useState(false);
   const [AlertMessage, setAlertMessage] = useState("");
@@ -91,15 +90,15 @@ const MetaMaskLogin = () => {
         console.log(data);
         // setRole(data.role);
         const role = data.role; // Assuming the role is stored directly under the Ethereum address
-        setRole(role);
+        // setRole(role);
         const location = data.location;
         sessionStorage.setItem('location', location);
 
-        setLocation(location);
+        // setLocation(location);
         
         console.log(`Ethereum ID ${ethereumAddress} is valid. Role: ${role}`);
         
-        setEthereumAddress(ethereumAddress);
+        // setEthereumAddress(ethereumAddress);
         
         return role; 
       } else {

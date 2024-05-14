@@ -1,20 +1,14 @@
 import React, { useState,useEffect } from "react";
 import Navbar from "./navbar/navbarAdmin";
 import Footer from "./footer/footer";
-import TransitData from "./TansitData";
-import { ref, get, remove, set } from "firebase/database";
+import { ref, get } from "firebase/database";
 import { database } from "../Components/LandingPage/firebase";
-import { Web3 } from "web3";
-import Transit from "../contracts/Transit2.json";
 import avatar from "../image/adminLogo.png";
 import { Container, Row, Col } from "react-bootstrap";
 import {
   MDBTable,
   MDBTableBody,
-  MDBTableHead,
-  MDBBtn,
-  MDBBadge,
-  MDBInput,
+  MDBTableHead
 } from "mdb-react-ui-kit";
 
 const ManagerTable = () => {

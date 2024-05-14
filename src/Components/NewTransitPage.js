@@ -3,13 +3,11 @@ import Navbar from "./navbar/navbar";
 import Footer from "./footer/footer";
 import { MDBInput, MDBBtn } from "mdb-react-ui-kit";
 import Transit from "../contracts/Transit2.json";
-import Alertbox from "./Alertbox";
-import { ref, get, remove, set } from "firebase/database";
+import { ref, get } from "firebase/database";
 import { database } from "../Components/LandingPage/firebase";
 import { ethers, Contract } from "ethers";
 import AlertBox from "./Alertbox";
 import LoadingAnimation from "./loadingAnimation/loadingAnimation";
-import { AlertHeading } from "react-bootstrap";
 
 function NewTransitPage() {
   const [batchId, setBatchId] = useState("");
